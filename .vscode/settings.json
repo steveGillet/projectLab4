@@ -1,0 +1,3 @@
+{
+  "cmake.sourceDirectory": "${workspaceFolder}/Tello-Python/Single_Tello_Test/h264decoder"
+}
