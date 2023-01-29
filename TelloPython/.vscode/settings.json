@@ -1,0 +1,5 @@
+{
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": false,
+  "cmake.sourceDirectory": "${workspaceFolder}/Tello_Video/h264decoder"
+}
