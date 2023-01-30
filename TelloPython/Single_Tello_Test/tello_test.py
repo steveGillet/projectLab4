@@ -11,22 +11,28 @@ f = open(file_name, "r")
 commands = f.readlines()
 
 tello = Tello()
-for command in commands:
-    if command != '' and command != '\n':
-        command = command.rstrip()
+# for command in commands:
+#     if command != '' and command != '\n':
+#         command = command.rstrip()
 
-        if command.find('delay') != -1:
-            sec = float(command.partition('delay')[2])
-            print('delay %s' % sec)
-            time.sleep(sec)
-            # tello.takeSnapshot()
-            print("qrcode:", tello.readQRcode())
-            pass
-        else:
-            tello.send_command(command)
-    # qrCode = tello.readQRcode()
-    # if(qrCode):
-        # print(qrCode)
+#         if command.find('delay') != -1:
+#             sec = float(command.partition('delay')[2])
+#             print('delay %s' % sec)
+#             time.sleep(sec)
+#             # tello.takeSnapshot()
+#             print("qrcode:", tello.readQRcode())
+#             pass
+#         else:
+#             tello.send_command(command)
+#     # qrCode = tello.readQRcode()
+#     # if(qrCode):
+#         # print(qrCode)
+
+tello.send_command('command')
+tello.send_command('streamon')
+for i in range(100):
+    print("QRCODE:", tello.readQRcode())
+    time.sleep(1)
 
 log = tello.get_log()
 
