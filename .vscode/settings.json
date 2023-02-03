@@ -1,3 +1,4 @@
 {
-  "cmake.sourceDirectory": "${workspaceFolder}/TelloPython/Single_Tello_Test/h264decoder"
+  "cmake.sourceDirectory": "${workspaceFolder}/TelloPython/Single_Tello_Test/h264decoder",
+  "cmake.configureOnOpen": false
 }
