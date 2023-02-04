@@ -40,7 +40,16 @@ class Tello:
 
         self.receive_video_thread.start()
 
+        # thread for reading qrcode
+        self.foundFlag = False
+        self.qrCodeValue = None
+        self.readQRcodeThread = threading.Thread(target=self._readQRcode)
+        self.readQRcodeThread.daemon = True
+
+        self.readQRcodeThread.start()
+
     def send_command(self, command):
+
         """
         Send a command to the ip address. Will be blocked until
         the last command receives an 'OK'.
@@ -135,31 +144,34 @@ class Tello:
     def get_log(self):
         return self.log
 
-    def readQRcode(self):
+    def _readQRcode(self):
         # print(self.frame)
-        try:
-            # ts = datetime.datetime.now()
-            # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
+        while True:
+            try:
+                # ts = datetime.datetime.now()
+                # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
 
-            # p = os.path.sep.join(("./img/", filename))
-            # print(self.frame)
-            # save the file
-            # frame = cv2.resize(self.frame, (480,480))
-            # img = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
-            img = cv2.resize(self.frame, (500, 500))
-            # print('Hallo')
-            # img = cv2.imread(self.frame)
-            # img = cv2.resize(img, (500,500))
-            # ts = datetime.datetime.now()
-            # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-            # p = os.path.sep.join(("./img/", filename))
-            # cv2.imwrite(p, img)
-            detect = cv2.QRCodeDetector()
-            value, points, straight_qrcode = detect.detectAndDecode(img)
-            # print(value, points, straight_qrcode)
-            return value
-        except:
-            return
+                # p = os.path.sep.join(("./img/", filename))
+                # print(self.frame)
+                # save the file
+                # frame = cv2.resize(self.frame, (480,480))
+                # img = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
+                img = cv2.resize(self.frame, (500, 500))
+                # print('Hallo')
+                # img = cv2.imread(self.frame)
+                # img = cv2.resize(img, (500,500))
+                # ts = datetime.datetime.now()
+                # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
+                # p = os.path.sep.join(("./img/", filename))
+                # cv2.imwrite(p, img)
+                detect = cv2.QRCodeDetector()
+                self.qrCodeValue, points, straight_qrcode = detect.detectAndDecode(img)
+                # print(value, points, straight_qrcode)
+                if self.qrCodeValue == "D":
+                    print('FOUND D')
+                    self.foundFlag = True
+            except:
+                pass
 
     def takeSnapshot(self):
         """
