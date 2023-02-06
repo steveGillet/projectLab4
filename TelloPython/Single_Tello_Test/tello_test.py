@@ -15,10 +15,12 @@ tello = Tello()
 tello.send_command('command')
 tello.send_command('streamon')
 tello.send_command('takeoff')
+tello.send_command('speed 100')
 
 time.sleep(1)
 
-print(commands)
+
+# print(commands)
 for command in commands:
     if tello.foundFlag == True:
         break
