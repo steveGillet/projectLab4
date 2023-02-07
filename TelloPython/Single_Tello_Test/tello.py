@@ -145,28 +145,12 @@ class Tello:
         return self.log
 
     def _readQRcode(self):
-        # print(self.frame)
         while True:
             try:
-                # ts = datetime.datetime.now()
-                # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-
-                # p = os.path.sep.join(("./img/", filename))
-                # print(self.frame)
-                # save the file
-                # frame = cv2.resize(self.frame, (480,480))
-                # img = cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
                 img = cv2.resize(self.frame, (500, 500))
-                # print('Hallo')
-                # img = cv2.imread(self.frame)
-                # img = cv2.resize(img, (500,500))
-                # ts = datetime.datetime.now()
-                # filename = "{}.jpg".format(ts.strftime("%Y-%m-%d_%H-%M-%S"))
-                # p = os.path.sep.join(("./img/", filename))
-                # cv2.imwrite(p, img)
                 detect = cv2.QRCodeDetector()
                 self.qrCodeValue, points, straight_qrcode = detect.detectAndDecode(img)
-                # print(value, points, straight_qrcode)
+                
                 if self.qrCodeValue == "D":
                     print('FOUND D')
                     self.foundFlag = True
