@@ -1,5 +1,6 @@
 import cv2
 import RPi.GPIO as GPIO
+import time
 #print(cv2.__version__)
 
 width=800
@@ -11,7 +12,9 @@ cam=cv2.VideoCapture('/dev/video0')
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(32, GPIO.OUT)
 pwm = GPIO.PWM(32,100)
-pwm.start(80)  
+pwm.start(10)
+time.sleep(4)
+pwm.ChangeDutyCycle(100)  
 
 while True:
     _, frame = cam.read()
@@ -22,3 +25,6 @@ while True:
 
 cam.release()
 cv2.destroyAllWindows() 
+
+
+
