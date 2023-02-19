@@ -23,7 +23,13 @@ while True:
     mask2 = cv2.inRange(hsv, lower_red, upper_red)
 
     # Combine the two masks
-    mask = cv2.bitwise_or(mask1, mask2)
+    redMask = cv2.bitwise_or(mask1, mask2)
+
+    lowerOrange = np.array([10,100,100])
+    upperOrange = np.array([20, 255, 255])
+    orangeMask = cv2.inRange(hsv, lowerOrange, upperOrange)
+
+    mask = cv2.bitwise_and(redMask, cv2.bitwise_not(orangeMask))
 
     # Apply a Gaussian blur to reduce noise
     blur = cv2.GaussianBlur(mask, (5, 5), 0)
@@ -37,10 +43,10 @@ while True:
     # Look for red, square door frame shape
     for contour in contours:
         approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
-        if len(approx) == 4:
+        if len(approx) >= 3:
             x,y,w,h = cv2.boundingRect(contour)
             aspect_ratio = float(w)/h
-            if aspect_ratio > 0.8 and aspect_ratio < 1.2:
+            if w>= 12*45:
                 red_pixels = cv2.countNonZero(mask[y:y+h, x:x+w])
                 if red_pixels > 0.2 * w * h:
                     cv2.drawContours(frame, [contour], 0, (0, 255, 0), 3)
