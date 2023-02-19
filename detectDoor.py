@@ -1,7 +1,11 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture(0)
+width=1280
+height=720
+flip=0
+camSet='nvarguscamerasrc sensor-id=1 ! video/x-raw(memory:NVMM), width=3264, height=2464, framerate=21/1,format=NV12 ! nvvidconv flip-method='+str(flip)+' ! video/x-raw, width='+str(width)+', height='+str(height)+', format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
+cap = cv2.VideoCapture(camSet)
 
 while True:
     _, frame = cap.read()
@@ -24,7 +28,7 @@ while True:
         if len(approx) == 4:
             x,y,w,h = cv2.boundingRect(contour)
             aspect_ratio = float(w)/h
-            if aspect_ratio > 0.9 and aspect_ratio < 1.1:
+            if aspect_ratio > 0.8 and aspect_ratio < 1.2:
                 cv2.drawContours(frame, [contour], 0, (0, 255, 0), 3)
 
     # Show the image
