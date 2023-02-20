@@ -17,7 +17,7 @@ def main():
     GPIO.setup(33, GPIO.OUT)
     pwm2 = GPIO.PWM(33,60)
     pwm2.start(100)
-    time.sleep(4)
+    time.sleep(30)
 # pwm.ChangeDutyCycle(50)  
 
 # while True:
