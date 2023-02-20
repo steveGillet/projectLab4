@@ -1,9 +1,53 @@
 import cv2
 import numpy as np
+import RPi.GPIO as GPIO
+import time
+
+in1 = 37
+in3 = 35
+in2 = 38
+in4 = 36
+enb = 33
+ena = 32
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(in3, GPIO.OUT)
+GPIO.setup(in4, GPIO.OUT)
+GPIO.setup(in1, GPIO.OUT)
+GPIO.setup(in2, GPIO.OUT)
+GPIO.setup(ena, GPIO.OUT)
+GPIO.setup(enb, GPIO.OUT)
+pwm1 = GPIO.PWM(ena,60)
+pwm2 = GPIO.PWM(enb,60)
+
+def turnLeft():
+    pwm1.start(100)
+    pwm2.start(100)
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in4, GPIO.LOW)
+
+def turnRight():
+    pwm1.start(100)
+    pwm2.start(100)
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in4, GPIO.LOW)
+
+def stopMoving():
+    pwm1.start(0)
+    pwm2.start(0)
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in4, GPIO.LOW)
+    
 
 width=1280
 height=720
-flip=0
+flip=0 
 camSet='nvarguscamerasrc sensor-id=1 ! video/x-raw(memory:NVMM), width=3264, height=2464, framerate=21/1,format=NV12 ! nvvidconv flip-method='+str(flip)+' ! video/x-raw, width='+str(width)+', height='+str(height)+', format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
 cap = cv2.VideoCapture(camSet)
 
@@ -51,12 +95,12 @@ while True:
                 if red_pixels > 0.2 * w * h:
                     cv2.drawContours(frame, [contour], 0, (0, 255, 0), 3)
                     center = x + w / 2
-                    # if center < 635:
-                    #     turnLeft()
-                    # elif center > 645:
-                    #     turnRight()
-                    # else:
-                    #     goForward()
+                    if center < 635:
+                        turnLeft()
+                    elif center > 645:
+                        turnRight()
+                    else:
+                        stopMoving()
 
     # Show the image
     cv2.imshow("Red, square door frame detection", frame)
@@ -64,6 +108,7 @@ while True:
     # Exit the loop if 'q' is pressed
     if cv2.waitKey(1) == ord('q'):
         break
+
 
 cap.release()
 cv2.destroyAllWindows()
