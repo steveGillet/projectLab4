@@ -11,28 +11,34 @@ f = open(file_name, "r")
 commands = f.readlines()
 
 tello = Tello()
-# for command in commands:
-#     if command != '' and command != '\n':
-#         command = command.rstrip()
-
-#         if command.find('delay') != -1:
-#             sec = float(command.partition('delay')[2])
-#             print('delay %s' % sec)
-#             time.sleep(sec)
-#             # tello.takeSnapshot()
-#             print("qrcode:", tello.readQRcode())
-#             pass
-#         else:
-#             tello.send_command(command)
-#     # qrCode = tello.readQRcode()
-#     # if(qrCode):
-#         # print(qrCode)
 
 tello.send_command('command')
 tello.send_command('streamon')
-for i in range(100):
-    print("QRCODE:", tello.readQRcode())
+tello.send_command('takeoff')
+tello.send_command('speed 100')
+
+time.sleep(1)
+
+
+# print(commands)
+for command in commands:
+    if tello.foundFlag == True:
+        break
+    if command != '' and command != '\n':
+        command = command.rstrip()
+
+        tello.send_command(command)
     time.sleep(1)
+
+    
+# while(tello.foundFlag == False):
+#     tello.send_command('forward 20')
+#     time.sleep(1)
+#     tello.send_command('cw 90')
+#     time.sleep(1)
+
+print('landing')
+tello.send_command('land')
 
 log = tello.get_log()
 

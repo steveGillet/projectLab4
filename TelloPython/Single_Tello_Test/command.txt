@@ -1,9 +1,28 @@
-command
-streamon
-takeoff
-delay 3
-forward 20
-delay 3
-back 20
-delay 3
-land
+forward 30
+cw 90
+forward 30
+cw 90
+forward 60
+cw 90
+forward 60
+cw 90
+forward 60
+cw 90
+forward 60
+cw 90
+forward 90
+cw 90
+forward 90
+cw 90
+forward 90
+cw 90
+forward 90
+cw 90
+forward 120
+cw 90
+forward 120
+cw 90
+forward 120
+cw 90
+forward 120
+cw 90
