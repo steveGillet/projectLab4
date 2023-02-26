@@ -88,6 +88,7 @@ while True:
     for contour in contours:
         approx = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour, True), True)
         if len(approx) >= 3:
+            print(len(approx))
             x,y,w,h = cv2.boundingRect(contour)
             aspect_ratio = float(w)/h
             if w>= 12*45:
