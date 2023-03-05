@@ -6,8 +6,8 @@ import threading
 
 # Define a function that will be executed by the timer thread
 def timer_function(duration):
+    print(duration)
     global flag
-    print("Timer thread is running!")
     time.sleep(duration)
     stopMoving()
     flag = False
@@ -15,11 +15,9 @@ def timer_function(duration):
 # Set the flag variable to False initially
 flag = False
 
-print("Timer thread has completed.")
-
 in1 = 37
-in3 = 35
 in2 = 38
+in3 = 35
 in4 = 36
 enb = 33
 ena = 32
@@ -33,14 +31,15 @@ GPIO.setup(ena, GPIO.OUT)
 GPIO.setup(enb, GPIO.OUT)
 pwm1 = GPIO.PWM(ena,60)
 pwm2 = GPIO.PWM(enb,60)
-pwm1.start(40)
-pwm2.start(40)
+
 
 def turnLeft():
     GPIO.output(in1, GPIO.HIGH)
     GPIO.output(in2, GPIO.LOW)
     GPIO.output(in3, GPIO.LOW)
     GPIO.output(in4, GPIO.HIGH)
+    pwm1.start(40)
+    pwm2.start(40)
     # pwm1.ChangeDutyCycle(50)
     # pwm2.ChangeDutyCycle(50)
 
@@ -50,6 +49,8 @@ def turnRight():
     GPIO.output(in2, GPIO.HIGH)
     GPIO.output(in3, GPIO.HIGH)
     GPIO.output(in4, GPIO.LOW)
+    pwm1.start(40)
+    pwm2.start(40)
     # pwm1.ChangeDutyCycle(50)
     # pwm2.ChangeDutyCycle(50)
 
@@ -59,8 +60,8 @@ def stopMoving():
     GPIO.output(in3, GPIO.LOW)
     GPIO.output(in2, GPIO.LOW)
     GPIO.output(in4, GPIO.LOW)
-    # pwm1.stop()
-    # pwm2.stop()
+    pwm1.stop()
+    pwm2.stop()
     
 
 width=1280
@@ -75,28 +76,28 @@ while True:
     # Convert the frame to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    lowerRed = np.array([155, 75, 80])
-    upperRed = np.array([180, 230, 130])
+    # lowerRed = np.array([155, 75, 80])
+    # upperRed = np.array([180, 230, 130])
 
-    # # Define the lower and upper bounds of the red color
-    # lower_red = np.array([0, 50, 50])
-    # upper_red = np.array([10, 255, 255])
-    # mask1 = cv2.inRange(hsv, lower_red, upper_red)
+    # Define the lower and upper bounds of the red color
+    lower_red = np.array([0, 50, 50])
+    upper_red = np.array([10, 255, 255])
+    mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
-    # lower_red = np.array([170, 50, 50])
-    # upper_red = np.array([180, 255, 255])
-    # mask2 = cv2.inRange(hsv, lower_red, upper_red)
+    lower_red = np.array([170, 50, 50])
+    upper_red = np.array([180, 255, 255])
+    mask2 = cv2.inRange(hsv, lower_red, upper_red)
 
-    # # Combine the two masks
-    # redMask = cv2.bitwise_or(mask1, mask2)
+    # Combine the two masks
+    redMask = cv2.bitwise_or(mask1, mask2)
 
-    # lowerOrange = np.array([10,100,100])
-    # upperOrange = np.array([20, 255, 255])
-    # orangeMask = cv2.inRange(hsv, lowerOrange, upperOrange)
+    lowerOrange = np.array([10,100,100])
+    upperOrange = np.array([20, 255, 255])
+    orangeMask = cv2.inRange(hsv, lowerOrange, upperOrange)
 
-    # mask = cv2.bitwise_and(redMask, cv2.bitwise_not(orangeMask))
+    mask = cv2.bitwise_and(redMask, cv2.bitwise_not(orangeMask))
 
-    mask = cv2.inRange(hsv, lowerRed, upperRed)
+    # mask = cv2.inRange(hsv, lowerRed, upperRed)
 
     # Apply a Gaussian blur to reduce noise
     blur = cv2.GaussianBlur(mask, (5, 5), 0)
@@ -121,6 +122,7 @@ while True:
                     center = x + w / 2
                     if center < 620 and not flag:
                         turnLeft()
+                        print('left')
                         offCenter = 635 - center
                         # # Create a timer thread that will execute the timer_function after 5 seconds
                         timer = threading.Thread(target=timer_function, args=(.00135*offCenter,))
@@ -130,6 +132,7 @@ while True:
                         
                     elif center > 650 and not flag:
                         turnRight()
+                        print('right')
                         offCenter = center - 635
                         # # Create a timer thread that will execute the timer_function after 5 seconds
                         timer = threading.Thread(target=timer_function, args=(.00135*offCenter,))
