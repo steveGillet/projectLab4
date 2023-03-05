@@ -23,9 +23,9 @@ pwm2 = GPIO.PWM(enb,60)
 
 
 def turnLeft():
-    GPIO.output(in1, GPIO.HIGH)
-    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in1, GPIO.LOW)
     GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
     GPIO.output(in4, GPIO.HIGH)
     pwm1.start(100)
     pwm2.start(100)
@@ -33,11 +33,11 @@ def turnLeft():
     
 def turnRight():
     GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in3, GPIO.LOW)
     GPIO.output(in2, GPIO.HIGH)
-    GPIO.output(in3, GPIO.HIGH)
-    GPIO.output(in4, GPIO.LOW)
-    pwm1.ChangeDutyCycle(50)
-    pwm2.ChangeDutyCycle(50)
+    GPIO.output(in4, GPIO.HIGH)
+    pwm1.start(50)
+    pwm2.start(50)
     
 
 def stopMoving():
@@ -50,8 +50,8 @@ def stopMoving():
     pwm2.stop()
 
 turnLeft()
-time.sleep(1)
+time.sleep(5)
 turnRight()
-time.sleep(1)
+time.sleep(5)
 stopMoving()
 GPIO.cleanup()
