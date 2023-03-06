@@ -1,5 +1,5 @@
 import cv2
-from getkey import getkey, keys
+# from getkey import getkey, keys
 
 width=1280
 height=720
@@ -25,7 +25,7 @@ while True:
         break
 
     elif key == ord('f'):
-        cv2.imwrite('image{}.jpg'.format(i), frame)
+        cv2.imwrite('./front/imageFront2{}.jpg'.format(i), frame)
         i += 1
 
 
