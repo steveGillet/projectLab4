@@ -30,4 +30,22 @@ class YoloDetector():
     def score_frame(self, frame):
 
         self.model.to(self.device)
-        downscale
+        downscale_factor = 2
+        width = int(frame.shape[1] / downscale_factor)
+        height = int(frame.shape[0] / downscale_factor)
+        frame = cv2.resize(frame, (width, height))
+        #frame = frame.to(self.device)
+
+        results =self.model(frame)
+        #print(results)
+
+        labels, cord = results.xyxyn[0], results.xyxyn[0][:, :-1]
+        #print(labels)
+
+        return labels, cord
+    
+    def class_to_label(self, x):
+
+        return self.classes[int(x)]
+    
+    def plot_boxes(self, frame, labels, height
