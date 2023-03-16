@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.optimizers import SGD
 
 # Define the CNN architecture
 model = keras.Sequential([
@@ -15,7 +16,8 @@ model = keras.Sequential([
 ])
 
 # Compile the model
-model.compile(optimizer='adam',
+sgd = SGD(learning_rate=0.01, momentum=0.9)
+model.compile(optimizer=sgd,
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
