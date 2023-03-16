@@ -2,7 +2,11 @@ import tensorflow as tf
 from tensorflow import keras
 import cv2
 
-model = keras.models.load_model('cnn_model.h5')
+def adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False):
+    return tf.keras.optimizers.Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, decay=decay, amsgrad=amsgrad)
+
+custom_objects = {'adam': adam}
+model = keras.models.load_model('cnn_model.h5', custom_objects=custom_objects)
 
 width=1280
 height=720
