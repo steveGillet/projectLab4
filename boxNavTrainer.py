@@ -45,4 +45,4 @@ model.fit(
         validation_data=validation_generator)
 
 # Save the trained model
-model.save('cnn_model')
+model.save('cnn_model.h5')
