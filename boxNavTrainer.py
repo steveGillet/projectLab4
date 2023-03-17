@@ -23,9 +23,9 @@ model.compile(optimizer='adam',
 
 # Create data generators for training and validation
 train_datagen = ImageDataGenerator(rescale=1./255,
-                                   shear_range=0.2,
+                                   shear_range=0,
                                    zoom_range=0.2,
-                                   horizontal_flip=True)
+                                   horizontal_flip=False)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
