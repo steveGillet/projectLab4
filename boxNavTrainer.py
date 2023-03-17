@@ -43,7 +43,7 @@ validation_generator = test_datagen.flow_from_directory(
 # Train the model
 model.fit(
         train_generator,
-        epochs=30,
+        epochs=60,
         validation_data=validation_generator)
 
 # Save the trained model
