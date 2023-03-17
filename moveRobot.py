@@ -4,14 +4,14 @@ import RPi.GPIO as GPIO
 # import Jetson.GPIO as GPIO
 import time
 
-in1 = 37
-in3 = 35
-in2 = 38
-in4 = 36
-enb = 33
-ena = 32
+in1 = 19
+in2 = 16
+in3 = 20
+in4 = 21
+ena = 12
+enb = 13
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(in3, GPIO.OUT)
 GPIO.setup(in4, GPIO.OUT)
 GPIO.setup(in1, GPIO.OUT)
@@ -23,8 +23,8 @@ pwm2 = GPIO.PWM(enb,60)
 
 
 def turnLeft():
-    GPIO.output(in1, GPIO.HIGH)
-    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
     GPIO.output(in3, GPIO.LOW)
     GPIO.output(in4, GPIO.HIGH)
     pwm1.start(40)
@@ -34,8 +34,8 @@ def turnLeft():
 
     
 def turnRight():
-    GPIO.output(in1, GPIO.LOW)
-    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
     GPIO.output(in3, GPIO.HIGH)
     GPIO.output(in4, GPIO.LOW)
     pwm1.start(40)
