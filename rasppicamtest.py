@@ -10,9 +10,10 @@ picam.start_preview(Preview.QTGL)
 
 picam.start()
 
+i = 0
 while True:
-    time.sleep(2)
-    
-picam.capture_file("test-python.jpg")
+    input()
+    picam.capture_file("forward{}.jpg".format(i))
+    i+=1
 
 picam.close()
