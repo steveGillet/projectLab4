@@ -16,8 +16,8 @@ model = keras.Sequential([
 ])
 
 # Compile the model
-sgd = SGD(learning_rate=0.01, momentum=0.9)
-model.compile(optimizer=sgd,
+# sgd = SGD(learning_rate=0.01, momentum=0.9)
+model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
