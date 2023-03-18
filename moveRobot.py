@@ -23,8 +23,8 @@ pwm2 = GPIO.PWM(enb,60)
 
 
 def turnLeft():
-    GPIO.output(in1, GPIO.LOW)
-    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
     GPIO.output(in3, GPIO.LOW)
     GPIO.output(in4, GPIO.HIGH)
     pwm1.start(40)
@@ -34,10 +34,30 @@ def turnLeft():
 
     
 def turnRight():
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.start(40)
+    pwm2.start(40)
+    # pwm1.ChangeDutyCycle(50)
+    # pwm2.ChangeDutyCycle(50)
+
+def moveForward():
     GPIO.output(in1, GPIO.HIGH)
     GPIO.output(in2, GPIO.LOW)
     GPIO.output(in3, GPIO.HIGH)
     GPIO.output(in4, GPIO.LOW)
+    pwm1.start(40)
+    pwm2.start(40)
+    # pwm1.ChangeDutyCycle(50)
+    # pwm2.ChangeDutyCycle(50)
+
+def moveBackward():
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in4, GPIO.HIGH)
     pwm1.start(40)
     pwm2.start(40)
     # pwm1.ChangeDutyCycle(50)
@@ -55,6 +75,10 @@ def stopMoving():
 turnLeft()
 time.sleep(1)
 turnRight()
+time.sleep(1)
+moveForward()
+time.sleep(1)
+moveBackward()
 time.sleep(1)
 stopMoving()
 GPIO.cleanup()
