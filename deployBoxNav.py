@@ -9,15 +9,15 @@ model = keras.models.load_model('cnn_model.h5')
 
 cv2.startWindowThread()
 
-# picam2 = Picamera2()
-# picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (3296, 2480)}))
-# picam2.start()
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (3296, 2480)}))
+picam2.start()
 
 # Loop over frames from the camera
 while True:
     # Preprocess the image for the CNN model
-    frame = cv2.imread('right40.jpg')
-    # frame = picam2.capture_array()
+    # frame = cv2.imread('right40.jpg')
+    frame = picam2.capture_array()
     frame1 = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     print(frame.shape)
     print(frame.dtype)

@@ -13,7 +13,7 @@ picam.start()
 i = 0
 while True:
     input()
-    picam.capture_file("right4{}.jpg".format(i))
+    picam.capture_file("leftpic{}.jpg".format(i))
     i+=1
 
 picam.close()
