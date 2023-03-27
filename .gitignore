@@ -2,3 +2,4 @@
 *.zip
 production
 ProductionV2
+/drone_detection/ultralytics
