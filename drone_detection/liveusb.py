@@ -4,11 +4,9 @@
 
 # model = YOLO("D:\downloads\\best.pt")
 
-
 # results = model.track(source="0", device="0",show=True, tracker="bytetrack.yaml") #stream=True) 
 
 #model.predict(source="0",show=True,conf=0.5)
-
 
 # cap = cv2.VideoCapture(0)
 
@@ -151,8 +149,8 @@ from ultralytics import YOLO
 model = YOLO("D:\downloads\\best.pt")
 
 # Camera parameters
-focal_length = 730  # Example value, replace with your camera's focal length
-drone_real_width = 0.17  # Example value, replace with your drone's actual width in meters
+focal_length = 730  # C920 webcam focal length 3.9mm??
+drone_real_width = 0.17  # Tello width
 
 # Open the video capture
 cap = cv2.VideoCapture(0)
@@ -163,7 +161,7 @@ frame_center_y = frame_height // 2
 
 # Function to control the camera pan-tilt servos
 def adjust_pan_tilt_servos(dx, dy):
-    # Implement the logic to control the pan-tilt servos based on dx and dy values
+    # logic to control servo will go here!!!!!!!!
     pass
 
 while cap.isOpened():
@@ -187,10 +185,10 @@ while cap.isOpened():
             class_name = names[int(class_id)]
 
             if class_name == "Tello":
-                x_center = (x1 + x2) / 2
-                y_center = (y1 + y2) / 2
-                dx = x_center - frame_center_x
-                dy = y_center - frame_center_y
+                x_center = (x1 + x2) / 2            #Calculate the center pixel of the drone_x position
+                y_center = (y1 + y2) / 2            #Calculate the center pixel of the drone_y position
+                dx = x_center - frame_center_x      #Calculate the difference between frame_center_x and drone_x position
+                dy = y_center - frame_center_y      #Calculate the difference between frame_center_y and drone_y position
 
                 adjust_pan_tilt_servos(dx, dy)
 
