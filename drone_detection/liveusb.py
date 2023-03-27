@@ -143,6 +143,7 @@
 
 
 import cv2
+<<<<<<< HEAD
 from ultralytics import YOLO
 
 # Load the YOLOv8 model
@@ -218,3 +219,11 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+=======
+model = YOLO("best.torchscript")
+
+
+# model.predict(source="0",show=True,conf=0.5)
+
+results = model.track(source="0", show=True, tracker="customTrack.yaml") 
+>>>>>>> bdef3df96d4b7f8d2fec15f31bcfb472974f3c2d
