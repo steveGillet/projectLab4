@@ -144,9 +144,19 @@
 
 import cv2
 from ultralytics import YOLO
+import time
+import board
+import digitalio
+
+
+
 
 # Load the YOLOv8 model
 model = YOLO("D:\downloads\\best.pt")
+
+# desired distance between the ground robot and the drone
+
+desired_distance = 0.5
 
 # Camera parameters
 focal_length = 730  # C920 webcam focal length 3.9mm??
@@ -163,6 +173,21 @@ frame_center_y = frame_height // 2
 def adjust_pan_tilt_servos(dx, dy):
     # logic to control servo will go here!!!!!!!!
     pass
+
+def adjust_robot_movement(distance):
+    if distance < desired_distance - 0.05:
+        #move the robot forward
+        pass
+
+    elif distance > desired_distance + 0.05:
+        #move the robot backwards
+        pass
+
+    else:
+        #stop the robot
+        pass
+
+
 
 while cap.isOpened():
     ret, frame = cap.read()
