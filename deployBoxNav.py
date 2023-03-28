@@ -1,13 +1,10 @@
 import tensorflow as tf
 from tensorflow import keras
 import cv2
-from picamera2 import Picamera2
+# from picamera2 import Picamera2
 import time
 import numpy as np
-
-import cv2
-import numpy as np
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 # import Jetson.GPIO as GPIO
 import time
 
@@ -18,79 +15,80 @@ in4 = 21
 ena = 12
 enb = 13
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(in3, GPIO.OUT)
-GPIO.setup(in4, GPIO.OUT)
-GPIO.setup(in1, GPIO.OUT)
-GPIO.setup(in2, GPIO.OUT)
-GPIO.setup(ena, GPIO.OUT)
-GPIO.setup(enb, GPIO.OUT)
-pwm1 = GPIO.PWM(ena,60)
-pwm2 = GPIO.PWM(enb,60)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(in3, GPIO.OUT)
+# GPIO.setup(in4, GPIO.OUT)
+# GPIO.setup(in1, GPIO.OUT)
+# GPIO.setup(in2, GPIO.OUT)
+# GPIO.setup(ena, GPIO.OUT)
+# GPIO.setup(enb, GPIO.OUT)
+# pwm1 = GPIO.PWM(ena,60)
+# pwm2 = GPIO.PWM(enb,60)
 
 
-def turnLeft():
-    GPIO.output(in1, GPIO.HIGH)
-    GPIO.output(in2, GPIO.LOW)
-    GPIO.output(in3, GPIO.LOW)
-    GPIO.output(in4, GPIO.HIGH)
-    pwm1.start(40)
-    pwm2.start(40)
-    # pwm1.ChangeDutyCycle(50)
-    # pwm2.ChangeDutyCycle(50)
+# def turnLeft():
+#     GPIO.output(in1, GPIO.HIGH)
+#     GPIO.output(in2, GPIO.LOW)
+#     GPIO.output(in3, GPIO.LOW)
+#     GPIO.output(in4, GPIO.HIGH)
+#     pwm1.start(40)
+#     pwm2.start(40)
+#     # pwm1.ChangeDutyCycle(50)
+#     # pwm2.ChangeDutyCycle(50)
 
     
-def turnRight():
-    GPIO.output(in1, GPIO.LOW)
-    GPIO.output(in2, GPIO.HIGH)
-    GPIO.output(in3, GPIO.HIGH)
-    GPIO.output(in4, GPIO.LOW)
-    pwm1.start(40)
-    pwm2.start(40)
-    # pwm1.ChangeDutyCycle(50)
-    # pwm2.ChangeDutyCycle(50)
+# def turnRight():
+#     GPIO.output(in1, GPIO.LOW)
+#     GPIO.output(in2, GPIO.HIGH)
+#     GPIO.output(in3, GPIO.HIGH)
+#     GPIO.output(in4, GPIO.LOW)
+#     pwm1.start(40)
+#     pwm2.start(40)
+#     # pwm1.ChangeDutyCycle(50)
+#     # pwm2.ChangeDutyCycle(50)
 
-def moveForward():
-    GPIO.output(in1, GPIO.HIGH)
-    GPIO.output(in2, GPIO.LOW)
-    GPIO.output(in3, GPIO.HIGH)
-    GPIO.output(in4, GPIO.LOW)
-    pwm1.start(40)
-    pwm2.start(40)
-    # pwm1.ChangeDutyCycle(50)
-    # pwm2.ChangeDutyCycle(50)
+# def moveForward():
+#     GPIO.output(in1, GPIO.HIGH)
+#     GPIO.output(in2, GPIO.LOW)
+#     GPIO.output(in3, GPIO.HIGH)
+#     GPIO.output(in4, GPIO.LOW)
+#     pwm1.start(40)
+#     pwm2.start(40)
+#     # pwm1.ChangeDutyCycle(50)
+#     # pwm2.ChangeDutyCycle(50)
 
-def moveBackward():
-    GPIO.output(in1, GPIO.LOW)
-    GPIO.output(in2, GPIO.HIGH)
-    GPIO.output(in3, GPIO.LOW)
-    GPIO.output(in4, GPIO.HIGH)
-    pwm1.start(40)
-    pwm2.start(40)
-    # pwm1.ChangeDutyCycle(50)
-    # pwm2.ChangeDutyCycle(50)
+# def moveBackward():
+#     GPIO.output(in1, GPIO.LOW)
+#     GPIO.output(in2, GPIO.HIGH)
+#     GPIO.output(in3, GPIO.LOW)
+#     GPIO.output(in4, GPIO.HIGH)
+#     pwm1.start(40)
+#     pwm2.start(40)
+#     # pwm1.ChangeDutyCycle(50)
+#     # pwm2.ChangeDutyCycle(50)
 
-def stopMoving():
-    GPIO.output(in1, GPIO.LOW)
-    GPIO.output(in3, GPIO.LOW)
-    GPIO.output(in2, GPIO.LOW)
-    GPIO.output(in4, GPIO.LOW)
-    pwm1.stop()
-    pwm2.stop()
+# def stopMoving():
+#     GPIO.output(in1, GPIO.LOW)
+#     GPIO.output(in3, GPIO.LOW)
+#     GPIO.output(in2, GPIO.LOW)
+#     GPIO.output(in4, GPIO.LOW)
+#     pwm1.stop()
+#     pwm2.stop()
 
 model = keras.models.load_model('cnn_model.h5')
 
-picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (3296, 2480)}))
-picam2.start()
+# picam2 = Picamera2()
+# picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (3296, 2480)}))
+# picam2.start()
 
 cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-
+cap = cv2.VideoCapture(0)
 # Loop over frames from the camera
 while True:
     # Preprocess the image for the CNN model
     # frame = cv2.imread('right40.jpg')
-    frame = picam2.capture_array()
+    # frame = picam2.capture_array()
+    ret, frame = cap.read()
     frame1 = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     print(frame.shape)
     print(frame.dtype)
@@ -112,25 +110,28 @@ while True:
         break
 
     if label == 'forward':
-        moveForward()
+        # moveForward()
         time.sleep(1)
-        stopMoving()
+        # stopMoving()
+        print('forward')
     elif label == 'left':
-        turnLeft()
-        time.sleep(2)
-        moveForward()
+        # turnLeft()
+        # time.sleep(2)
+        # moveForward()
         time.sleep(1)
-        turnRight()
-        time.sleep(2)
-        stopMoving()    
+        # turnRight()
+        # time.sleep(2)
+        # stopMoving()    
+        print('left')
     elif label == 'right':
-        turnRight()
-        time.sleep(2)
-        moveForward()
+        # turnRight()
+        # time.sleep(2)
+        # moveForward()
         time.sleep(1)
-        turnLeft()
-        time.sleep(2)
-        stopMoving()             
+        # turnLeft()
+        # time.sleep(2)
+        # stopMoving()  
+        print('right')           
 
 # Clean up the camera and OpenCV resources
 cv2.destroyAllWindows()
