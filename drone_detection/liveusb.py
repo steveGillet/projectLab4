@@ -146,7 +146,7 @@ import cv2
 from ultralytics import YOLO
 
 # Load the YOLOv8 model
-model = YOLO("D:\downloads\\best.pt")
+model = YOLO("best.onnx")
 
 # Camera parameters
 focal_length = 730  # C920 webcam focal length 3.9mm??
@@ -171,7 +171,7 @@ while cap.isOpened():
         break
 
     # Detect objects and track using YOLOv8 and ByteTrack
-    results = model.track(frame, show=False, device="0", tracker="bytetrack.yaml")
+    results = model.track(frame, show=False, tracker="bytetrack.yaml")
 
     # Iterate over tracked objects
     if len(results) > 0 and results[0].boxes is not None:
@@ -196,19 +196,19 @@ while cap.isOpened():
                 distance = (drone_real_width * focal_length) / drone_pixel_width
                 print("Estimated distance to drone:", distance)
 
-                cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-                cv2.putText(frame, f"Distance: {distance:.2f}m", (int(x1), int(y1) - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                # cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
+                # cv2.putText(frame, f"Distance: {distance:.2f}m", (int(x1), int(y1) - 10),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 
 
-                # Show the dx and dy values on the video feed
-                cv2.putText(frame, f"dx: {dx:.2f}", (int(x1), int(y1) - 30),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                cv2.putText(frame, f"dy: {dy:.2f}", (int(x1), int(y1) - 50),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                # # Show the dx and dy values on the video feed
+                # cv2.putText(frame, f"dx: {dx:.2f}", (int(x1), int(y1) - 30),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                # cv2.putText(frame, f"dy: {dy:.2f}", (int(x1), int(y1) - 50),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 
-    cv2.imshow("Frame", frame)
+    # cv2.imshow("Frame", frame)
 
     # Break the loop if 'q' key is pressed
     if cv2.waitKey(1) & 0xFF == ord("q"):

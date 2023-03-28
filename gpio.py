@@ -1,118 +1,73 @@
-import wiringpi
+import board
+import digitalio
+import busio
+from adafruit_pca9685 import PCA9685
 import time
-from wiringpi import GPIO
-import subprocess
 
-ena = 2
-enb = 5
-in1 = 7
-in2 = 8
-in3 = 11
-in4 = 12
+in1 = digitalio.DigitalInOut(board.D15)
+in2 = digitalio.DigitalInOut(board.D19)
+in3 = digitalio.DigitalInOut(board.D21)
+in4 = digitalio.DigitalInOut(board.D23)
 
-wiringpi.wiringPiSetup()
-wiringpi.pinMode(in1, GPIO.OUTPUT)
-wiringpi.pinMode(in2, GPIO.OUTPUT)
-wiringpi.pinMode(in3, GPIO.OUTPUT)
-wiringpi.pinMode(in4, GPIO.OUTPUT)
+in1.direction = digitalio.Direction.OUTPUT
+in2.direction = digitalio.Direction.OUTPUT
+in3.direction = digitalio.Direction.OUTPUT
+in4.direction = digitalio.Direction.OUTPUT
 
-def runCommand(command):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    return stdout.decode().strip(), stderr.decode().strip()
+i2c = busio.I2C(board.SCL, board.SDA)
 
-def fillCommandString(first, chip, command, channel=""):
-    if channel=="":
-        return f"echo {first} > /sys/class/pwm/{chip}/{command}"
-    else:
-        return f"echo {first} > /sys/class/pwm/{chip}/pwm{channel}/{command}"
+pca = PCA9685(i2c)
 
-def initializePWM():
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip4', 'export'))
-    if stderr:
-        print(f"Error: {stderr}")
+# Set the PWM frequency to 60hz.
+pca.frequency = 60
 
-    stdout, stderr = runCommand(fillCommandString(60, 'pwmchip4', 'period', 0))
-    if stderr:
-        print(f"Error: {stderr}")
-
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip5', 'export'))
-    if stderr:
-        print(f"Error: {stderr}")
-
-    stdout, stderr = runCommand(fillCommandString(60, 'pwmchip5', 'period', 0))
-    if stderr:
-        print(f"Error: {stderr}")
-
-def pulseWidth(chip, duty):
-    if chip == 2:
-        chip = 'pwmchip5'
-    if chip == 5:
-        chip = 'pwmchip4'
-    stdout, stderr = runCommand(fillCommandString(duty, chip, 'duty_cycle', 0))
-    if stderr:
-        print(f"Error: {stderr}")
-
-    if duty != 60:
-        stdout, stderr = runCommand(fillCommandString(1, chip, 'enable', 0))
-        if stderr:
-            print(f"Error: {stderr}")
-    else:
-        stdout, stderr = runCommand(fillCommandString(0, chip, 'enable', 0))
-        if stderr:
-            print(f"Error: {stderr}")
-
-def closePWM():
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip4', 'enable', 0))
-    if stderr:
-        print(f"Error: {stderr}")
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip4', 'unexport'))
-    if stderr:
-        print(f"Error: {stderr}")
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip5', 'enable', 0))
-    if stderr:
-        print(f"Error: {stderr}")
-    stdout, stderr = runCommand(fillCommandString(0, 'pwmchip5', 'unexport'))
-    if stderr:
-        print(f"Error: {stderr}")
+# Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
+# but the PCA9685 will only actually give 12 bits of resolution.
+ena = pca.channels[2].duty_cycle
+enb = pca.channels[3].duty_cycle
 
 def stop():
-    wiringpi.digitalWrite(in1, GPIO.LOW)
-    wiringpi.digitalWrite(in2, GPIO.LOW)
-    wiringpi.digitalWrite(in3, GPIO.LOW)
-    wiringpi.digitalWrite(in4, GPIO.LOW)
-    pulseWidth(ena, 60)
-    pulseWidth(enb, 60)
+    in1.value = False
+    in2.value = False
+    in3.value = False
+    in4.value = False
+    ena = 0x0000
+    enb = 0x0000
 
 def turnLeft():
-    wiringpi.digitalWrite(in1, GPIO.HIGH)
-    wiringpi.digitalWrite(in2, GPIO.LOW)
-    wiringpi.digitalWrite(in3, GPIO.LOW)
-    wiringpi.digitalWrite(in4, GPIO.HIGH)
-    pulseWidth(ena, 20)
-    pulseWidth(enb, 20)
+    in1.value = True
+    in2.value = False
+    in3.value = False
+    in4.value = True
+    ena = 0x7FFF
+    enb = 0x7FFF
 
 def turnRight():
-    wiringpi.digitalWrite(in1, GPIO.LOW)
-    wiringpi.digitalWrite(in2, GPIO.HIGH)
-    wiringpi.digitalWrite(in3, GPIO.HIGH)
-    wiringpi.digitalWrite(in4, GPIO.LOW)
-    pulseWidth(ena, 20)   
-    pulseWidth(enb, 20)
+    in1.value = False
+    in2.value = True
+    in3.value = True
+    in4.value = False
+    ena = 0x7FFF
+    enb = 0x7FFF
 
 def forward():
-    wiringpi.digitalWrite(in1, GPIO.HIGH)
-    wiringpi.digitalWrite(in2, GPIO.LOW)
-    wiringpi.digitalWrite(in3, GPIO.HIGH)
-    wiringpi.digitalWrite(in4, GPIO.LOW)
-    pulseWidth(ena, 20)    
-    pulseWidth(enb, 20)
+    in1.value = True
+    in2.value = False
+    in3.value = True
+    in4.value = False
+    ena = 0x7FFF
+    enb = 0x7FFF
 
-initializePWM()
+def backward():
+    in1.value = False
+    in2.value = True
+    in3.value = False
+    in4.value = True
+    ena = 0x7FFF
+    enb = 0x7FFF   
+
 turnLeft()
 time.sleep(1)
 turnRight()
 time.sleep(1)
 stop()
-
-closePWM()
