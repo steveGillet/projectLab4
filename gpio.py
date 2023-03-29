@@ -5,8 +5,8 @@ from adafruit_pca9685 import PCA9685
 import time
 
 in1 = digitalio.DigitalInOut(board.D15)
-in2 = digitalio.DigitalInOut(board.D19)
-in3 = digitalio.DigitalInOut(board.D21)
+in2 = digitalio.DigitalInOut(board.D24)
+in3 = digitalio.DigitalInOut(board.D22)
 in4 = digitalio.DigitalInOut(board.D23)
 
 in1.direction = digitalio.Direction.OUTPUT
@@ -23,51 +23,55 @@ pca.frequency = 60
 
 # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
 # but the PCA9685 will only actually give 12 bits of resolution.
-ena = pca.channels[2].duty_cycle
-enb = pca.channels[3].duty_cycle
+ena = 2
+enb = 3
 
 def stop():
     in1.value = False
     in2.value = False
     in3.value = False
     in4.value = False
-    ena = 0x0000
-    enb = 0x0000
-
-def turnLeft():
-    in1.value = True
-    in2.value = False
-    in3.value = False
-    in4.value = True
-    ena = 0x7FFF
-    enb = 0x7FFF
+    pca.channels[ena].duty_cycle = 0x0000
+    pca.channels[enb].duty_cycle = 0x0000
 
 def turnRight():
+    in1.value = True
+    in2.value = False
+    in3.value = False
+    in4.value = True
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
+
+def turnLeft():
     in1.value = False
     in2.value = True
     in3.value = True
     in4.value = False
-    ena = 0x7FFF
-    enb = 0x7FFF
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
 
-def forward():
+def backward():
     in1.value = True
     in2.value = False
     in3.value = True
     in4.value = False
-    ena = 0x7FFF
-    enb = 0x7FFF
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
 
-def backward():
+def forward():
     in1.value = False
     in2.value = True
     in3.value = False
     in4.value = True
-    ena = 0x7FFF
-    enb = 0x7FFF   
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
 
 turnLeft()
 time.sleep(1)
 turnRight()
+time.sleep(1)
+forward()
+time.sleep(1)
+backward()
 time.sleep(1)
 stop()
