@@ -13,7 +13,10 @@ TILT_SPEED = 1
 MIN_CONFIDENCE = 0.5
 
 # Load ONNX model
-session = ort.InferenceSession(ONNX_MODEL_PATH)
+import onnxruntime as ort
+
+# Create an InferenceSession with ACL execution provider
+session = ort.InferenceSession("best.onnx", providers=["ACLExecutionProvider"])
 input_name = session.get_inputs()[0].name
 output_name = session.get_outputs()[0].name
 
@@ -25,7 +28,7 @@ while True:
         break
 
     # Preprocess the frame
-    frame = np.resize(frame, (480,640,3))
+    frame = np.resize(frame, (640,640,3))
     frame = frame.astype(np.float32)
     frame = np.expand_dims(frame, axis=0)
     frame = np.transpose(frame, (0, 3, 2, 1))
@@ -38,7 +41,7 @@ while True:
     best_detection = None
     for detection in detections:
         confidence = detection[-1]
-        if confidence > MIN_CONFIDENCE and confidence > max_confidence:
+        if (confidence.any() > MIN_CONFIDENCE) and (confidence.any() > max_confidence):
             max_confidence = confidence
             best_detection = detection
 
@@ -48,15 +51,15 @@ while True:
 
         # Calculate the pan and tilt angles required to center the camera on the detected object
         center_x, center_y = (x + w / 2, y + h / 2)
-        frame_height, frame_width, _ = frame.shape
+        frame_height, frame_width, _, _ = frame.shape
         dx, dy = (center_x - frame_width / 2, center_y - frame_height / 2)
 
-        # Update the pan and tilt angles based on the object's position
-        pan_angle += PAN_SPEED * np.sign(dx)
-        tilt_angle += TILT_SPEED * np.sign(dy)
-    # Clamp the angles to avoid exceeding the servo limits
-    pan_angle = np.clip(pan_angle, 0, 180)
-    tilt_angle = np.clip(tilt_angle, 0, 180)
+    #     # Update the pan and tilt angles based on the object's position
+    #     pan_angle += PAN_SPEED * np.sign(dx)
+    #     tilt_angle += TILT_SPEED * np.sign(dy)
+    # # Clamp the angles to avoid exceeding the servo limits
+    # pan_angle = np.clip(pan_angle, 0, 180)
+    # tilt_angle = np.clip(tilt_angle, 0, 180)
 
     # Set the new angles for the servos
     # kit.servo[PAN_SERVO_CHANNEL].angle = pan_angle
