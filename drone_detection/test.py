@@ -1,36 +1,165 @@
 import cv2
 from ultralytics import YOLO
+import time
+import board
+import digitalio
+from adafruit_servokit import ServoKit
+import numpy as np
+import busio
+from adafruit_pca9685 import PCA9685
 
-# Load the YOLOv8 model
-model = YOLO('D:\downloads\\best.pt')
+kit=ServoKit(channels=16)
 
-# Open the video file
-# video_path = "path/to/your/video/file.mp4"
-cap = cv2.VideoCapture(0)
+model = YOLO("best.onnx")
 
-# Loop through the video frames
-while cap.isOpened():
-    # Read a frame from the video
-    success, frame = cap.read()
+focal_length = 730  # C920 webcam focal length 3.9mm??
+drone_real_width = 0.17  # Tello width
 
-    if success:
-        # Run YOLOv8 inference on the frame
-        # results = model.track(, show=False, device="0", tracker="botsort.yaml")
-        results = model(source="0", show=True)
-        # Visualize the results on the frame
-        annotated_frame = results[0].plot()
+frame_width = 640
+frame_height = 480
+frame_center_x = 320
+frame_center_y = 240
 
-        # Display the annotated frame
-        cv2.imshow("YOLOv8 Inference", annotated_frame)
+pan_angle = 90
+tilt_angle = 90
+kit.servo[0].angle = pan_angle
+kit.servo[1].angle = tilt_angle
 
-        # Break the loop if 'q' is pressed
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+in1 = digitalio.DigitalInOut(board.D15)
+in2 = digitalio.DigitalInOut(board.D24)
+in3 = digitalio.DigitalInOut(board.D22)
+in4 = digitalio.DigitalInOut(board.D23)
+
+in1.direction = digitalio.Direction.OUTPUT
+in2.direction = digitalio.Direction.OUTPUT
+in3.direction = digitalio.Direction.OUTPUT
+in4.direction = digitalio.Direction.OUTPUT
+
+i2c = busio.I2C(board.SCL, board.SDA)
+
+pca = PCA9685(i2c)
+pca.frequency = 60
+ena = 2
+enb = 3
+
+def set_motor_speeds(speed_a, speed_b):
+    if speed_a > 0:
+        in1.value = True
+        in2.value = False
+        pca.channels[ena].duty_cycle = 0x7fff
+        
     else:
-        # Break the loop if the end of the video is reached
-        break
+        in1.value = False
+        in2.value = True
 
-# Release the video capture object and close the display window
-cap.release()
-cv2.destroyAllWindows()
+    if speed_b > 0:
+        in3.value = True
+        in4.value = False
+        pca.channels[ena].duty_cycle = 0x7fff
+        
+    else:
+        in3.value = False
+        in4.value = True
+    
+
+# PID class for ground robot distance control
+class PIDG:
+    def __init__(self, Kp, Ki, Kd):
+        self.Kp = Kp
+        self.Ki = Ki
+        self.Kd = Kd
+        self.prev_error = 0
+        self.integral = 0
+        self.prev_time = time.time()
+
+    def update(self, error):
+        dt = time.time() - self.prev_time
+        self.integral += error * dt
+        derivative = (error - self.prev_error) / dt
+
+        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+
+        self.prev_error = error
+        self.prev_time = time.time()
+
+        return output
+    
+distance_pid = PIDG(0.1, 0.01, 0.01)
+desired_distance = 0.5  # meters beteen drone and ground robot
+    
+# PID class for servo control
+class PID:
+    def __init__(self, Kp, Ki, Kd):
+        self.Kp = Kp
+        self.Ki = Ki
+        self.Kd = Kd
+        self.prev_error = 0
+        self.integral = 0
+        self.prev_time = time.time()
+
+    def update(self, error):
+        dt = time.time() - self.prev_time
+        self.integral += error * dt
+        derivative = (error - self.prev_error) / dt
+
+        output = self.Kp * error + self.Ki * self.integral + self.Kd * derivative
+
+        self.prev_error = error
+        self.prev_time = time.time()
+
+        return output
+    
+pid_pan = PID(0.1, 0.01, 0.01)
+pid_tilt = PID(0.1, 0.01, 0.01)
+
+def adjust_pan_tilt_servos(dx, dy):
+    global pan_angle
+    global tilt_angle
+
+    pan_output = pan_pid.update(dx)
+    tilt_output = tilt_pid.update(dy)
+
+    pan_angle -= pan_output
+    tilt_angle += tilt_output
+
+    pan_angle = np.clip(pan_angle, 0, 180)
+    tilt_angle = np.clip(tilt_angle, 0, 180)
+
+    kit.servo[0].angle = pan_angle
+    kit.servo[1].angle = tilt_angle
+
+
+
+while True:
+    results = model.track(source="0", show=True, stream=True)
+    for i, (result) in enumerate(results):
+        boxes = result.boxes
+        for box in boxes:
+            x, y, w, h = box.xywh[0]  # get box coordinates in (top, left, bottom, right) format
+
+            # Calculate the distance between the drone and the ground robot
+            distance = (drone_real_width * focal_length) / w
+            print(f"Distance: {distance:.2f}m")
+            print(f"X: {x}")
+            print(f"Y: {y}")
+
+            x_center = (x + w) / 2            #Calculate the center pixel of the drone_x position
+            y_center = (y + h) / 2            #Calculate the center pixel of the drone_y position
+            dx = x_center - frame_center_x      #Calculate the difference between frame_center_x and drone_x position
+            dy = y_center - frame_center_y      #Calculate the difference between frame_center_y and drone_y position
+
+            adjust_pan_tilt_servos(dx, dy)
+
+            #calculate speed based on distance error
+            distance_error = desired_distance - distance
+            speed = distance_pid.update(distance_error)
+
+            #set motor speeds to maintain desired distance
+            set_motor_speeds(speed, speed)
+
+            # delay to allow the servo to move
+            time.sleep(0.1)
+
+# cleanup gpio
+GPIO.cleanup()
 

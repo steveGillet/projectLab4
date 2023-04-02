@@ -5,6 +5,8 @@ import board
 import digitalio
 from adafruit_servokit import ServoKit
 import numpy as np
+from adafruit_pca9685 import PCA9685
+import busio
 
 kit=ServoKit(channels=16)
 
@@ -49,7 +51,7 @@ def adjust_pan_tilt_servos(dx, dy):
     prev_dx, prev_dy = dx_smooth, dy_smooth
 
 while True:
-    results = model(source="0", show=True, stream=True)
+    results = model.track(source="0", show=True, stream=True)
     for i, (result) in enumerate(results):
         boxes = result.boxes
         for box in boxes:
