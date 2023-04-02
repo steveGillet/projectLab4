@@ -222,20 +222,20 @@
 
 
 import cv2
-# from ultralytics import YOLO
+from ultralytics import YOLO
 import time
 import board
 import digitalio
 from adafruit_servokit import ServoKit
 import numpy as np
-import onnxruntime as ort
+# import onnxruntime as ort
 
 kit=ServoKit(channels=16)
 
 # Load the YOLOv8 model
-# model = YOLO("best.onnx")
-session = ort.InferenceSession('best.onnx')
-input_name = session.get_inputs()[0].name
+model = YOLO("best.onnx")
+# session = ort.InferenceSession('best.onnx')
+# input_name = session.get_inputs()[0].name
 
 # desired distance between the ground robot and the drone
 
@@ -299,16 +299,16 @@ while cap.isOpened():
     frame_center_y = int(frame_height * scale_factor) // 2
 
     # Detect objects and track using YOLOv8 and ByteTrack
-    # results = model.track(frame, show=False, tracker="bytetrack.yaml")
+    results = model.track(frame, show=False, tracker="bytetrack.yaml")
     # Preprocess the input frame
     input_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    input_frame = cv2.resize(input_frame, (640, 640))
-    input_frame = input_frame.transpose(2, 0, 1)
-    input_frame = np.expand_dims(input_frame, axis=0)
-    input_frame = input_frame.astype(np.float32) / 255
+    # input_frame = cv2.resize(input_frame, (640, 640))
+    # input_frame = input_frame.transpose(2, 0, 1)
+    # input_frame = np.expand_dims(input_frame, axis=0)
+    # input_frame = input_frame.astype(np.float32) / 255
 
     # Perform object detection using the ONNX model
-    results = session.run(None, {input_name: input_frame})
+    # results = session.run(None, {input_name: input_frame})
     # Iterate over tracked objects
     if len(results) > 0 and results[0].boxes is not None:
         boxes = results[0].boxes.xyxy.cpu().numpy()
