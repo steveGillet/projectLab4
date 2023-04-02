@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2d21e36..8dfb5ad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -478,6 +478,7 @@ if (onnxruntime_ENABLE_PYTHON)
+ endif()
+ 
+ if (onnxruntime_PREFER_SYSTEM_LIB)
++  find_package(Eigen3 CONFIG)
+   if(NOT TARGET Eigen3::Eigen)
+     # Some platforms have an old version of FindEigen3.cmake which does not create the target Eigen3::Eigen
+     find_package(Eigen3)

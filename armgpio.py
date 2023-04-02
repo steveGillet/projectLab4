@@ -21,6 +21,7 @@ pca.frequency = 60
 # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
 # but the PCA9685 will only actually give 12 bits of resolution.
 pca.channels[2].duty_cycle = 0xFFFF
+pca.channels[3].duty_cycle = 0xFFFF
 
 # Try to create an SPI device
 # spi = busio.SPI(board.SCLK, board.MOSI, board.MISO)

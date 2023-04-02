@@ -1,0 +1,475 @@
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command-line option ‘-Wnon-virtual-dtor’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type  -Wnon-virtual-dtor'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c26b0/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c26b0.dir/build.make CMakeFiles/cmTC_c26b0.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c26b0.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type  -Wnon-virtual-dtor -o CMakeFiles/cmTC_c26b0.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command-line option ‘-Wnon-virtual-dtor’ is valid for C++/ObjC++ but not for C
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking C executable cmTC_c26b0
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c26b0.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_c26b0.dir/src.c.o -o cmTC_c26b0 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C\+\+'
+    Output line: 'cc1plus: warning: command-line option ‘-Wmissing-prototypes’ is valid for C/ObjC but not for C++'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations  -Wmissing-prototypes'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8bcf1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_8bcf1.dir/build.make CMakeFiles/cmTC_8bcf1.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_8bcf1.dir/src.cxx.o
+/usr/bin/c++   -O3 -DNDEBUG -std=c++11 -fPIE    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations  -Wmissing-prototypes -o CMakeFiles/cmTC_8bcf1.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: warning: command-line option ‘-Wmissing-prototypes’ is valid for C/ObjC but not for C++
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking CXX executable cmTC_8bcf1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8bcf1.dir/link.txt --verbose=1
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cmTC_8bcf1.dir/src.cxx.o -o cmTC_8bcf1 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C\+\+'
+    Output line: 'cc1plus: warning: command-line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations  -Wstrict-prototypes'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c9f25/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c9f25.dir/build.make CMakeFiles/cmTC_c9f25.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c9f25.dir/src.cxx.o
+/usr/bin/c++   -O3 -DNDEBUG -std=c++11 -fPIE    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations  -Wstrict-prototypes -o CMakeFiles/cmTC_c9f25.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: warning: command-line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking CXX executable cmTC_c9f25
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c9f25.dir/link.txt --verbose=1
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cmTC_c9f25.dir/src.cxx.o -o cmTC_c9f25 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command-line option ‘-Wsign-promo’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow  -Wsign-promo'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_2ac85/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_2ac85.dir/build.make CMakeFiles/cmTC_2ac85.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2ac85.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow  -Wsign-promo -o CMakeFiles/cmTC_2ac85.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command-line option ‘-Wsign-promo’ is valid for C++/ObjC++ but not for C
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking C executable cmTC_2ac85
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2ac85.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_2ac85.dir/src.c.o -o cmTC_2ac85 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command-line option ‘-Wsuggest-override’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wsuggest-override'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_85df3/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_85df3.dir/build.make CMakeFiles/cmTC_85df3.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_85df3.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wsuggest-override -o CMakeFiles/cmTC_85df3.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command-line option ‘-Wsuggest-override’ is valid for C++/ObjC++ but not for C
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking C executable cmTC_85df3
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85df3.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_85df3.dir/src.c.o -o cmTC_85df3 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command-line option ‘-Wno-delete-non-virtual-dtor’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wno-delete-non-virtual-dtor'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_16fd1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_16fd1.dir/build.make CMakeFiles/cmTC_16fd1.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_16fd1.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wno-delete-non-virtual-dtor -o CMakeFiles/cmTC_16fd1.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command-line option ‘-Wno-delete-non-virtual-dtor’ is valid for C++/ObjC++ but not for C
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking C executable cmTC_16fd1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_16fd1.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_16fd1.dir/src.c.o -o cmTC_16fd1 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-unnamed-type-template-args’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor  -Wno-unnamed-type-template-args'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_90932/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_90932.dir/build.make CMakeFiles/cmTC_90932.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_90932.dir/src.cxx.o
+/usr/bin/c++   -O3 -DNDEBUG -std=c++11 -fPIE    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor  -Wno-unnamed-type-template-args -o CMakeFiles/cmTC_90932.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-unnamed-type-template-args’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_90932
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90932.dir/link.txt --verbose=1
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cmTC_90932.dir/src.cxx.o -o cmTC_90932 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1: note: unrecognized command-line option ‘-Wno-unnamed-type-template-args’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wno-unnamed-type-template-args'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_2d91a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_2d91a.dir/build.make CMakeFiles/cmTC_2d91a.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2d91a.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized  -Wno-unnamed-type-template-args -o CMakeFiles/cmTC_2d91a.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1: note: unrecognized command-line option ‘-Wno-unnamed-type-template-args’ may have been intended to silence earlier diagnostics
+Linking C executable cmTC_2d91a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2d91a.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_2d91a.dir/src.c.o -o cmTC_2d91a 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C'
+    Output line: 'cc1: warning: command-line option ‘-fvisibility-inlines-hidden’ is valid for C++/ObjC++ but not for C'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden  -fvisibility-inlines-hidden'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0d703/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0d703.dir/build.make CMakeFiles/cmTC_0d703.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0d703.dir/src.c.o
+/usr/bin/cc   -O3 -DNDEBUG -fPIE    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden  -fvisibility-inlines-hidden -o CMakeFiles/cmTC_0d703.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+cc1: warning: command-line option ‘-fvisibility-inlines-hidden’ is valid for C++/ObjC++ but not for C
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking C executable cmTC_0d703
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0d703.dir/link.txt --verbose=1
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/cmTC_0d703.dir/src.c.o -o cmTC_0d703 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1: note: unrecognized command-line option ‘-Wno-shorten-64-to-32’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -Wno-shorten-64-to-32'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_27e9d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_27e9d.dir/build.make CMakeFiles/cmTC_27e9d.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_27e9d.dir/src.c.o
+/usr/bin/cc   -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -Wno-unused-parameter -Wno-sign-compare  -O3 -DNDEBUG  -DNDEBUG -fPIE    -Wno-shorten-64-to-32 -o CMakeFiles/cmTC_27e9d.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1: note: unrecognized command-line option ‘-Wno-shorten-64-to-32’ may have been intended to silence earlier diagnostics
+Linking C executable cmTC_27e9d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27e9d.dir/link.txt --verbose=1
+/usr/bin/cc    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -Wno-unused-parameter -Wno-sign-compare  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_27e9d.dir/src.c.o -o cmTC_27e9d 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'command[- ]line option .* is valid for .* but not for C\+\+'
+    Output line: 'cc1plus: warning: command-line option ‘-Wno-missing-prototypes’ is valid for C/ObjC but not for C++'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-missing-prototypes'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_dbde2/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_dbde2.dir/build.make CMakeFiles/cmTC_dbde2.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_dbde2.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-missing-declarations -Wno-unused-parameter  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-missing-prototypes -o CMakeFiles/cmTC_dbde2.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: warning: command-line option ‘-Wno-missing-prototypes’ is valid for C/ObjC but not for C++
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+Linking CXX executable cmTC_dbde2
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dbde2.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-missing-declarations -Wno-unused-parameter  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_dbde2.dir/src.cxx.o -o cmTC_dbde2 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1: note: unrecognized command-line option ‘-Wno-implicit-const-int-float-conversion’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -Wno-implicit-const-int-float-conversion'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_c84a3/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c84a3.dir/build.make CMakeFiles/cmTC_c84a3.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c84a3.dir/src.c.o
+/usr/bin/cc   -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden  -O3 -DNDEBUG  -DNDEBUG -fPIE    -Wno-implicit-const-int-float-conversion -o CMakeFiles/cmTC_c84a3.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1: note: unrecognized command-line option ‘-Wno-implicit-const-int-float-conversion’ may have been intended to silence earlier diagnostics
+Linking C executable cmTC_c84a3
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c84a3.dir/link.txt --verbose=1
+/usr/bin/cc    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_c84a3.dir/src.c.o -o cmTC_c84a3 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1: note: unrecognized command-line option ‘-Wno-null-pointer-subtraction’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c'
+    check option: ' -Wno-null-pointer-subtraction'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8fccd/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_8fccd.dir/build.make CMakeFiles/cmTC_8fccd.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8fccd.dir/src.c.o
+/usr/bin/cc   -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -Wno-undef -Wno-cast-align -Wno-implicit-fallthrough -Wno-unused-parameter -Wno-sign-compare -Wno-maybe-uninitialized  -O3 -DNDEBUG  -DNDEBUG -fPIE    -Wno-null-pointer-subtraction -o CMakeFiles/cmTC_8fccd.dir/src.c.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.c:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1: note: unrecognized command-line option ‘-Wno-null-pointer-subtraction’ may have been intended to silence earlier diagnostics
+Linking C executable cmTC_8fccd
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8fccd.dir/link.txt --verbose=1
+/usr/bin/cc    -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -Wno-undef -Wno-cast-align -Wno-implicit-fallthrough -Wno-unused-parameter -Wno-sign-compare -Wno-maybe-uninitialized  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_8fccd.dir/src.c.o -o cmTC_8fccd 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-inconsistent-missing-override’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-inconsistent-missing-override'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_60c33/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_60c33.dir/build.make CMakeFiles/cmTC_60c33.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_60c33.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wsign-promo -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-shadow -Wno-unused -Wno-sign-compare -Wno-undef -Wno-missing-declarations -Wno-uninitialized -Wno-switch -Wno-parentheses -Wno-array-bounds -Wno-extra -Wno-deprecated-declarations -Wno-misleading-indentation -Wno-deprecated -Wno-suggest-override  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-inconsistent-missing-override -o CMakeFiles/cmTC_60c33.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-inconsistent-missing-override’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_60c33
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_60c33.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wsign-promo -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-shadow -Wno-unused -Wno-sign-compare -Wno-undef -Wno-missing-declarations -Wno-uninitialized -Wno-switch -Wno-parentheses -Wno-array-bounds -Wno-extra -Wno-deprecated-declarations -Wno-misleading-indentation -Wno-deprecated -Wno-suggest-override  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_60c33.dir/src.cxx.o -o cmTC_60c33 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-implicit-const-int-float-conversion’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-implicit-const-int-float-conversion'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e4994/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e4994.dir/build.make CMakeFiles/cmTC_e4994.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_e4994.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wsign-promo -Wno-delete-non-virtual-dtor -Wno-comment -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-shadow -Wno-unused -Wno-sign-compare -Wno-undef -Wno-missing-declarations -Wno-uninitialized -Wno-switch -Wno-parentheses -Wno-array-bounds -Wno-extra -Wno-deprecated-declarations -Wno-misleading-indentation -Wno-deprecated -Wno-suggest-override -Wno-implicit-fallthrough -Wno-tautological-compare -Wno-reorder -Wno-unused-result  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-implicit-const-int-float-conversion -o CMakeFiles/cmTC_e4994.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-implicit-const-int-float-conversion’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_e4994
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e4994.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wsign-promo -Wno-delete-non-virtual-dtor -Wno-comment -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-shadow -Wno-unused -Wno-sign-compare -Wno-undef -Wno-missing-declarations -Wno-uninitialized -Wno-switch -Wno-parentheses -Wno-array-bounds -Wno-extra -Wno-deprecated-declarations -Wno-misleading-indentation -Wno-deprecated -Wno-suggest-override -Wno-implicit-fallthrough -Wno-tautological-compare -Wno-reorder -Wno-unused-result  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_e4994.dir/src.cxx.o -o cmTC_e4994 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-tautological-undefined-compare’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-tautological-undefined-compare'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_beb9b/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_beb9b.dir/build.make CMakeFiles/cmTC_beb9b.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_beb9b.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-tautological-undefined-compare -o CMakeFiles/cmTC_beb9b.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-tautological-undefined-compare’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_beb9b
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_beb9b.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_beb9b.dir/src.cxx.o -o cmTC_beb9b 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-shorten-64-to-32’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-shorten-64-to-32'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_a4d9a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a4d9a.dir/build.make CMakeFiles/cmTC_a4d9a.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a4d9a.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef -Wno-ignored-qualifiers -Wno-extra -Wno-unused-function -Wno-unused-const-variable  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-shorten-64-to-32 -o CMakeFiles/cmTC_a4d9a.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-shorten-64-to-32’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_a4d9a
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a4d9a.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef -Wno-ignored-qualifiers -Wno-extra -Wno-unused-function -Wno-unused-const-variable  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_a4d9a.dir/src.cxx.o -o cmTC_a4d9a 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-enum-compare-switch’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-enum-compare-switch'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_6f196/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_6f196.dir/build.make CMakeFiles/cmTC_6f196.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_6f196.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef -Wno-ignored-qualifiers -Wno-extra -Wno-unused-function -Wno-unused-const-variable -Wno-invalid-offsetof  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-enum-compare-switch -o CMakeFiles/cmTC_6f196.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-enum-compare-switch’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_6f196
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6f196.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Winit-self -Wpointer-arith -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-deprecated -Wno-missing-declarations -Wno-shadow -Wno-unused-parameter -Wno-unused-local-typedefs -Wno-sign-compare -Wno-sign-promo -Wno-undef -Wno-ignored-qualifiers -Wno-extra -Wno-unused-function -Wno-unused-const-variable -Wno-invalid-offsetof  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_6f196.dir/src.cxx.o -o cmTC_6f196 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+
+Build output check failed:
+    Regex: 'unrecognized .*option'
+    Output line: 'cc1plus: note: unrecognized command-line option ‘-Wno-unused-private-field’ may have been intended to silence earlier diagnostics'
+Compilation failed:
+    source file: '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx'
+    check option: ' -Wno-unused-private-field'
+===== BUILD LOG =====
+Change Dir: /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_fb6e9/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fb6e9.dir/build.make CMakeFiles/cmTC_fb6e9.dir/build
+gmake[1]: Entering directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fb6e9.dir/src.cxx.o
+/usr/bin/c++   -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-unused-function -Wno-deprecated-declarations -Wno-overloaded-virtual  -O3 -DNDEBUG  -DNDEBUG -std=c++11 -fPIE    -Wno-unused-private-field -o CMakeFiles/cmTC_fb6e9.dir/src.cxx.o -c /home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx
+/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp/src.cxx:1: warning: ignoring ‘#pragma  ’ [-Wunknown-pragmas]
+    1 | #pragma
+      | 
+cc1plus: note: unrecognized command-line option ‘-Wno-unused-private-field’ may have been intended to silence earlier diagnostics
+Linking CXX executable cmTC_fb6e9
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb6e9.dir/link.txt --verbose=1
+/usr/bin/c++    -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections    -fvisibility=hidden -fvisibility-inlines-hidden -Wno-unused-function -Wno-deprecated-declarations -Wno-overloaded-virtual  -O3 -DNDEBUG  -DNDEBUG   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined  CMakeFiles/cmTC_fb6e9.dir/src.cxx.o -o cmTC_fb6e9 
+gmake[1]: Leaving directory '/home/rishi/projectLab4/drone_detection/build/CMakeFiles/CMakeTmp'
+
+
+===== END =====
+

@@ -4,9 +4,9 @@ import cv2
 width=1280
 height=720
 flip=0
-camSet='nvarguscamerasrc sensor-id=0 ! video/x-raw(memory:NVMM), width=3264, height=2464, framerate=21/1,format=NV12 ! nvvidconv flip-method='+str(flip)+' ! video/x-raw, width='+str(width)+', height='+str(height)+', format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
+# camSet='nvarguscamerasrc sensor-id=0 ! video/x-raw(memory:NVMM), width=3264, height=2464, framerate=21/1,format=NV12 ! nvvidconv flip-method='+str(flip)+' ! video/x-raw, width='+str(width)+', height='+str(height)+', format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
 #camSet ='v4l2src device=/dev/video1 ! video/x-raw,width='+str(width)+',height='+str(height)+',framerate=24/1 ! videoconvert ! appsink'
-cap=cv2.VideoCapture(camSet)
+cap=cv2.VideoCapture(0)
 
 ret, frame = cap.read()
 
@@ -25,10 +25,8 @@ while True:
         break
 
     elif key == ord('f'):
-        cv2.imwrite('./front/imageFront2{}.jpg'.format(i), frame)
+        cv2.imwrite('./train/forward/frontwcr2{}.jpg'.format(i), frame)
         i += 1
-
-
 
 cap.release()
 cv2.destroyAllWindows()
