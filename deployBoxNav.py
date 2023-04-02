@@ -17,18 +17,22 @@ class cam:
         self.camForwardFlag = 0
         self.camLeftFlag = 0
         self.camRightFlag = 0
+        self.tiltAngle = 90
     def camForward(self):
-        kit.servo[0].angle=90
+        self.tiltAngle = 90
+        kit.servo[0].angle=self.tiltAngle
         self.camForwardFlag = 1
         self.camLeftFlag = 0
         self.camRightFlag = 0
     def camLeft(self):
-        kit.servo[0].angle=0   
+        self.tiltAngle = 180
+        kit.servo[0].angle=self.tiltAngle   
         self.camForwardFlag = 0
         self.camLeftFlag = 1
         self.camRightFlag = 0
     def camRight(self):
-        kit.servo[0].angle=180
+        self.tiltAngle = 0
+        kit.servo[0].angle=self.tiltAngle
         self.camForwardFlag = 0
         self.camLeftFlag = 0
         self.camRightFlag = 1
@@ -97,6 +101,39 @@ def forward():
     pca.channels[ena].duty_cycle = 0x7FFF
     pca.channels[enb].duty_cycle = 0x7FFF
 
+def angleRight():
+    in1.value = False
+    in2.value = True
+    in3.value = False
+    in4.value = True
+    pca.channels[ena].duty_cycle = 0x5FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
+
+def angleLeft():
+    in1.value = False
+    in2.value = True
+    in3.value = False
+    in4.value = True
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x5FFF
+
+def adjust_pan_tilt_servos(dx, dy):
+    global pan_angle
+    global tilt_angle
+
+    pan_output = 2*np.sign(dx)
+    tilt_output = 2*np.sign(dy)
+
+    pan_angle -= pan_output
+    tilt_angle += tilt_output
+
+    pan_angle = np.clip(pan_angle, 0, 180)
+    tilt_angle = np.clip(tilt_angle, 0, 180)
+
+    kit.servo[0].angle = pan_angle
+    kit.servo[1].angle = tilt_angle
+    cam1.tiltAngle = pan_angle
+
 model = keras.models.load_model('cnn_model.h5')
 
 # picam2 = Picamera2()
@@ -105,6 +142,8 @@ model = keras.models.load_model('cnn_model.h5')
 
 # cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 cap = cv2.VideoCapture(0)
+turnLeftFlag = 0
+turnRightFlag = 0
 
 # Loop over frames from the camera
 while True:
@@ -112,12 +151,34 @@ while True:
     # frame = cv2.imread('right40.jpg')
     ret, frame = cap.read()
     # frame = picam2.capture_array()
-    frame1 = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    print(frame.shape)
-    print(frame.dtype)
+    frame1 = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame2 = cv2.resize(frame1, (64, 64))
     frame2 = frame2/ 255.0
-    frame2 = np.reshape(frame2, (1, 64, 64, 3))
+    frame2 = np.reshape(frame2, (1, 64, 64, 1))
+
+    # Define lower and upper bounds for the brown color in HSV space
+    lower_brown = np.array([10, 50, 50])
+    upper_brown = np.array([30, 255, 255])
+
+    # Convert image to HSV and threshold it to extract the brown object
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, lower_brown, upper_brown)
+
+    # Find contours in the binary mask
+    contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Find the contour with the largest area (assuming it is the brown object)
+    largest_contour = max(contours, key=cv2.contourArea)
+
+    # Calculate the bounding box of the contour
+    x, y, w, h = cv2.boundingRect(largest_contour)
+
+    # Calculate the x-coordinate of the center point of the bounding box
+    centerX = x + w / 2
+    frameCenterX = 320
+    dx = centerX - frameCenterX 
+
+    adjust_pan_tilt_servos(dx, 0)
 
     # Run the CNN model on the preprocessed image
     predictions = model.predict(frame2)
@@ -131,35 +192,38 @@ while True:
     # Exit the loop if the 'q' key is pressed
     if cv2.waitKey(1) == ord('q'):
         break
-
-    if label == 'forward':
-        if cam1.camLeftFlag:
-            turnRight()
-            cam1.camForward()
-            time.sleep(2)
-        elif cam1.camRightFlag:
-            turnLeft()
-            cam1.camForward()
-            time.sleep(2)
-        forward()
-        time.sleep(1)
-        stop()
-    elif label == 'left':
-        if not cam1.camRightFlag:
-            cam1.camRight()
-            turnLeft()
-            time.sleep(2)
-        forward()
-        time.sleep(1)
-        stop()    
-    elif label == 'right':
-        if not cam1.camLeftFlag:
-            cam1.camLeft()
-            turnRight()
-            time.sleep(2)
-        forward()
-        time.sleep(1)
-        stop()             
+    if turnLeftFlag:
+        if centerX >= 310:
+            turnLeftFlag = 0
+    elif turnRightFlag:
+        if centerX <= 310:
+            turnLeftFlag = 0
+    else:
+        if label == 'forward':
+            if cam1.tiltAngle > 95:
+                cam1.camForward()
+                turnLeftFlag = 1
+                turnLeft()
+            elif cam1.tiltAngle < 85:
+                cam1.camForward()
+                turnRightFlag = 1
+                turnRight()
+            else:
+                forward()
+        elif label == 'left':
+            if cam1.tiltAngle > 85:
+                cam1.camRight()
+                turnLeftFlag = 1
+                turnLeft()
+            else:
+                angleRight()
+        elif label == 'right':
+            if cam1.tiltAngle < 95:
+                cam1.camLeft()
+                turnRightFlag = 1
+                turnRight()
+            else:
+                angleLeft()          
 
 # Clean up the camera and OpenCV resources
 cv2.destroyAllWindows()

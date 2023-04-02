@@ -103,8 +103,8 @@ def adjust_pan_tilt_servos(dx, dy):
     global pan_angle
     global tilt_angle
 
-    pan_output = pan_pid.update(dx)
-    tilt_output = tilt_pid.update(dy)
+    pan_output = pid_pan.update(dx)
+    tilt_output = pid_tilt.update(dy)
 
     pan_angle -= pan_output
     tilt_angle += tilt_output
