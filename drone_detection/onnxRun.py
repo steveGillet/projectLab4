@@ -2,7 +2,9 @@ import cv2
 import onnxruntime as ort
 import numpy as np
 from adafruit_servokit import ServoKit
+import os
 
+os.environ['ONNXRT_NPU_ENABLE'] = '1'
 # Constants
 ONNX_MODEL_PATH = 'best.onnx'
 VIDEO_SOURCE = 0  # 0 for the first connected camera
@@ -16,26 +18,30 @@ MIN_CONFIDENCE = 0.5
 import onnxruntime as ort
 
 # Create an InferenceSession with ACL execution provider
-session = ort.InferenceSession("best.onnx", providers=["ACLExecutionProvider"])
+session = ort.InferenceSession("best.onnx")
+# options = ort.SessionOptions()
+# options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+# options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
+# options.execution_order = [":NPU"]
 input_name = session.get_inputs()[0].name
 output_name = session.get_outputs()[0].name
 
 cap = cv2.VideoCapture(VIDEO_SOURCE)
 
 while True:
-    ret, frame = cap.read()
+    ret, frame1 = cap.read()
     if not ret:
         break
 
     # Preprocess the frame
-    frame = np.resize(frame, (640,640,3))
+    frame = np.resize(frame1, (640,640,3))
     frame = frame.astype(np.float32)
     frame = np.expand_dims(frame, axis=0)
     frame = np.transpose(frame, (0, 3, 2, 1))
 
     # Run object detection
     detections = session.run([output_name], {input_name: frame})[0]
-
+    print("Detections: ", detections)
     # Find the highest confidence detection
     max_confidence = 0
     best_detection = None
@@ -46,8 +52,13 @@ while True:
             best_detection = detection
 
     if best_detection is not None:
+        print("Best Detection: ", best_detection)
         # Get the coordinates of the detected object
-        x, y, w, h = best_detection[:4]
+        x, y, w, h = [coord.item() for coord in best_detection[:-1]]
+        x1 = int(x * frame1.shape[1])
+        y1 = int(y * frame1.shape[0])
+        x2 = int((x + w) * frame1.shape[1])
+        y2 = int((y + h) * frame1.shape[0])
 
         # Calculate the pan and tilt angles required to center the camera on the detected object
         center_x, center_y = (x + w / 2, y + h / 2)
@@ -66,10 +77,10 @@ while True:
     # kit.servo[TILT_SERVO_CHANNEL].angle = tilt_angle
 
     # Draw a bounding box around the detected object
-    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv2.rectangle(frame1, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
     # Display the resulting frame
-    cv2.imshow('Object Tracking', frame)
+    cv2.imshow('Object Tracking', frame1)
 
     # Exit if 'q' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
