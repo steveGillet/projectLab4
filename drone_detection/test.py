@@ -53,15 +53,17 @@ def set_motor_speeds(speed_a, speed_b):
     else:
         in1.value = False
         in2.value = True
+        pca.channels[ena].duty_cycle = 0x7fff
 
     if speed_b > 0:
         in3.value = True
         in4.value = False
-        pca.channels[ena].duty_cycle = 0x7fff
+        pca.channels[enb].duty_cycle = 0x7fff
         
     else:
         in3.value = False
         in4.value = True
+        pca.channels[enb].duty_cycle = 0x7fff
 
 # Stop ground robot motors
 def stop_motors():
@@ -69,8 +71,8 @@ def stop_motors():
     in2.value = False
     in3.value = False
     in4.value = False
-    pca.channels[ena].duty_cycle = 0
-    pca.channels[enb].duty_cycle = 0
+    pca.channels[ena].duty_cycle = 0x0000
+    pca.channels[enb].duty_cycle = 0x0000
     
 
 # PID class for ground robot distance control
@@ -140,44 +142,41 @@ class PID:
 pid_pan = PID(0.1, 0.01, 0.01)  # PID parameters for pan servo, need to adjust the PID parameters
 pid_tilt = PID(0.1, 0.01, 0.01) # PID parameters for tilt servo, need to adjust the PID parameters
 
-
+  
 while True:
-    if keyboard.is_pressed('q'):  # Check if the 'q' key is pressed
-        print("Exiting the program.")
-        stop_motors()  # Stop the motors before exiting the loop
-        break  # Exit the loop, which will end the program
+    results = model.track(source = "0",show=True, stream=True, tracker = "bytetrack.yaml") # Added YOLO Tracker
+    for i, (result) in enumerate(results):
+        boxes = result.boxes
+        for box in boxes:
+            x, y, w, h = box.xywh[0]  # get box coordinates in (top, left, bottom, right) format
 
-    
-    while True:
-        results = model.track(source = "0", device = "0",show=True, stream=True, tracker = "bytetrack.yaml") # Added YOLO Tracker
-        for i, (result) in enumerate(results):
-            boxes = result.boxes
-            for box in boxes:
-                x, y, w, h = box.xywh[0]  # get box coordinates in (top, left, bottom, right) format
+            # Calculate the distance between the drone and the ground robot
+            distance = (drone_real_width * focal_length) / w
+            print(f"Distance: {distance:.2f}m")
+            print(f"X: {x}")
+            print(f"Y: {y}")
 
-                # Calculate the distance between the drone and the ground robot
-                distance = (drone_real_width * focal_length) / w
-                print(f"Distance: {distance:.2f}m")
-                print(f"X: {x}")
-                print(f"Y: {y}")
+            x_center = (x + w) / 2            #Calculate the center pixel of the drone_x position
+            y_center = (y + h) / 2            #Calculate the center pixel of the drone_y position
+            dx = x_center - frame_center_x      #Calculate the difference between frame_center_x and drone_x position
+            dy = y_center - frame_center_y      #Calculate the difference between frame_center_y and drone_y position
 
-                x_center = (x + w) / 2            #Calculate the center pixel of the drone_x position
-                y_center = (y + h) / 2            #Calculate the center pixel of the drone_y position
-                dx = x_center - frame_center_x      #Calculate the difference between frame_center_x and drone_x position
-                dy = y_center - frame_center_y      #Calculate the difference between frame_center_y and drone_y position
+            adjust_pan_tilt_servos(dx, dy)
 
-                adjust_pan_tilt_servos(dx, dy)
+            #calculate speed based on distance error
+            distance_error = desired_distance - distance
+            speed = distance_pid.update(distance_error)
 
-                #calculate speed based on distance error
-                distance_error = desired_distance - distance
-                speed = distance_pid.update(distance_error)
+            #set motor speeds to maintain desired distance
+            set_motor_speeds(speed, speed)
 
-                #set motor speeds to maintain desired distance
-                set_motor_speeds(speed, speed)
-
-                # delay to allow the servo to move
-                time.sleep(0.1)
+            # delay to allow the servo to move
+            time.sleep(0.1)
+    if keyboard.is_pressed('q'):
+        print("exiting the program")
+        stop_motors()
+        break
 
 # cleanup gpio
-GPIO.cleanup()
+#GPIO.cleanup()
 
