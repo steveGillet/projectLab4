@@ -14,30 +14,21 @@ from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
 class cam:
     def __init__(self):
-        self.camForwardFlag = 0
-        self.camLeftFlag = 0
-        self.camRightFlag = 0
-        self.tiltAngle = 90
+        self.panAngle = 90
+        self.tiltAngle = 100
+        kit.servo[0].angle=self.panAngle
+        kit.servo[1].angle=self.tiltAngle
     def camForward(self):
-        self.tiltAngle = 90
-        kit.servo[0].angle=self.tiltAngle
-        self.camForwardFlag = 1
-        self.camLeftFlag = 0
-        self.camRightFlag = 0
+        self.panAngle = 90
+        kit.servo[0].angle=self.panAngle
     def camLeft(self):
-        self.tiltAngle = 180
-        kit.servo[0].angle=self.tiltAngle   
-        self.camForwardFlag = 0
-        self.camLeftFlag = 1
-        self.camRightFlag = 0
+        self.panAngle = 180
+        kit.servo[0].angle=self.panAngle
     def camRight(self):
-        self.tiltAngle = 0
-        kit.servo[0].angle=self.tiltAngle
-        self.camForwardFlag = 0
-        self.camLeftFlag = 0
-        self.camRightFlag = 1
+        self.panAngle = 0
+        kit.servo[0].angle=self.panAngle
 cam1 = cam()
-kit.servo[1].angle=100
+
 
 in1 = digitalio.DigitalInOut(board.D15)
 in2 = digitalio.DigitalInOut(board.D24)
@@ -118,21 +109,18 @@ def angleLeft():
     pca.channels[enb].duty_cycle = 0x5FFF
 
 def adjust_pan_tilt_servos(dx, dy):
-    global pan_angle
-    global tilt_angle
 
     pan_output = 2*np.sign(dx)
     tilt_output = 2*np.sign(dy)
 
-    pan_angle -= pan_output
-    tilt_angle += tilt_output
+    cam1.panAngle -= pan_output
+    cam1.tiltAngle += tilt_output
 
-    pan_angle = np.clip(pan_angle, 0, 180)
-    tilt_angle = np.clip(tilt_angle, 0, 180)
+    cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
+    cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
 
-    kit.servo[0].angle = pan_angle
-    kit.servo[1].angle = tilt_angle
-    cam1.tiltAngle = pan_angle
+    kit.servo[0].angle = cam1.panAngle
+    kit.servo[1].angle = cam1.tiltAngle
 
 model = keras.models.load_model('cnn_model.h5')
 
@@ -196,29 +184,29 @@ while True:
         if centerX >= 310:
             turnLeftFlag = 0
     elif turnRightFlag:
-        if centerX <= 310:
-            turnLeftFlag = 0
+        if centerX <= 330:
+            turnRightFlag = 0
     else:
         if label == 'forward':
-            if cam1.tiltAngle > 95:
+            if cam1.panAngle > 100:
                 cam1.camForward()
                 turnLeftFlag = 1
                 turnLeft()
-            elif cam1.tiltAngle < 85:
+            elif cam1.panAngle < 80:
                 cam1.camForward()
                 turnRightFlag = 1
                 turnRight()
             else:
                 forward()
         elif label == 'left':
-            if cam1.tiltAngle > 85:
+            if cam1.panAngle > 95:
                 cam1.camRight()
                 turnLeftFlag = 1
                 turnLeft()
             else:
                 angleRight()
         elif label == 'right':
-            if cam1.tiltAngle < 95:
+            if cam1.panAngle < 85:
                 cam1.camLeft()
                 turnRightFlag = 1
                 turnRight()
