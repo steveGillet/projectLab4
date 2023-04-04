@@ -25,7 +25,7 @@ while True:
         break
 
     elif key == ord('f'):
-        cv2.imwrite('./train/forward/frontwcr2{}.jpg'.format(i), frame)
+        cv2.imwrite('.box{}.jpg'.format(i), frame)
         i += 1
 
 cap.release()

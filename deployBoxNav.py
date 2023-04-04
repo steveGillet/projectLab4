@@ -14,30 +14,20 @@ from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
 class cam:
     def __init__(self):
-        self.camForwardFlag = 0
-        self.camLeftFlag = 0
-        self.camRightFlag = 0
-        self.tiltAngle = 90
+        self.panAngle = 90
+        self.tiltAngle = 100
+        kit.servo[0].angle=self.panAngle
+        kit.servo[1].angle=self.tiltAngle
     def camForward(self):
-        self.tiltAngle = 90
-        kit.servo[0].angle=self.tiltAngle
-        self.camForwardFlag = 1
-        self.camLeftFlag = 0
-        self.camRightFlag = 0
+        self.panAngle = 90
+        kit.servo[0].angle=self.panAngle
     def camLeft(self):
-        self.tiltAngle = 180
-        kit.servo[0].angle=self.tiltAngle   
-        self.camForwardFlag = 0
-        self.camLeftFlag = 1
-        self.camRightFlag = 0
+        self.panAngle = 180
+        kit.servo[0].angle=self.panAngle
     def camRight(self):
-        self.tiltAngle = 0
-        kit.servo[0].angle=self.tiltAngle
-        self.camForwardFlag = 0
-        self.camLeftFlag = 0
-        self.camRightFlag = 1
+        self.panAngle = 0
+        kit.servo[0].angle=self.panAngle
 cam1 = cam()
-kit.servo[1].angle=100
 
 in1 = digitalio.DigitalInOut(board.D15)
 in2 = digitalio.DigitalInOut(board.D24)
@@ -118,21 +108,18 @@ def angleLeft():
     pca.channels[enb].duty_cycle = 0x5FFF
 
 def adjust_pan_tilt_servos(dx, dy):
-    global pan_angle
-    global tilt_angle
 
     pan_output = 2*np.sign(dx)
     tilt_output = 2*np.sign(dy)
 
-    pan_angle -= pan_output
-    tilt_angle += tilt_output
+    cam1.panAngle -= pan_output
+    cam1.tiltAngle += tilt_output
 
-    pan_angle = np.clip(pan_angle, 0, 180)
-    tilt_angle = np.clip(tilt_angle, 0, 180)
+    cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
+    cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
 
-    kit.servo[0].angle = pan_angle
-    kit.servo[1].angle = tilt_angle
-    cam1.tiltAngle = pan_angle
+    kit.servo[0].angle = cam1.panAngle
+    kit.servo[1].angle = cam1.tiltAngle
 
 model = keras.models.load_model('cnn_model.h5')
 
@@ -144,6 +131,9 @@ model = keras.models.load_model('cnn_model.h5')
 cap = cv2.VideoCapture(0)
 turnLeftFlag = 0
 turnRightFlag = 0
+min_width = 100
+x = 320
+w = 0
 
 # Loop over frames from the camera
 while True:
@@ -157,22 +147,29 @@ while True:
     frame2 = np.reshape(frame2, (1, 64, 64, 1))
 
     # Define lower and upper bounds for the brown color in HSV space
-    lower_brown = np.array([10, 50, 50])
-    upper_brown = np.array([30, 255, 255])
+    lower_color = np.array([120, 20, 120])
+    upper_color = np.array([170, 30, 180])
 
     # Convert image to HSV and threshold it to extract the brown object
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, lower_brown, upper_brown)
+    mask = cv2.inRange(hsv, lower_color, upper_color)
 
     # Find contours in the binary mask
     contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if contours:
+        # Find the contour with the largest area (assuming it is the brown object)
+        largest_contour = max(contours, key=cv2.contourArea)
 
-    # Find the contour with the largest area (assuming it is the brown object)
-    largest_contour = max(contours, key=cv2.contourArea)
-
-    # Calculate the bounding box of the contour
-    x, y, w, h = cv2.boundingRect(largest_contour)
-
+        # Calculate the bounding box of the contour
+        tempX, tempW = x, w
+        x, y, w, h = cv2.boundingRect(largest_contour)
+        if w >= min_width or h>= min_width:
+            # Draw a rectangle around the bounding box
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        else: 
+            x, w = tempX, tempW
+    else:
+        x, w = x, w
     # Calculate the x-coordinate of the center point of the bounding box
     centerX = x + w / 2
     frameCenterX = 320
@@ -191,34 +188,35 @@ while True:
 
     # Exit the loop if the 'q' key is pressed
     if cv2.waitKey(1) == ord('q'):
+        stop()
         break
     if turnLeftFlag:
         if centerX >= 310:
             turnLeftFlag = 0
     elif turnRightFlag:
-        if centerX <= 310:
-            turnLeftFlag = 0
+        if centerX <= 330:
+            turnRightFlag = 0
     else:
         if label == 'forward':
-            if cam1.tiltAngle > 95:
+            if cam1.panAngle > 100:
                 cam1.camForward()
                 turnLeftFlag = 1
                 turnLeft()
-            elif cam1.tiltAngle < 85:
+            elif cam1.panAngle < 80:
                 cam1.camForward()
                 turnRightFlag = 1
                 turnRight()
             else:
                 forward()
         elif label == 'left':
-            if cam1.tiltAngle > 85:
+            if cam1.panAngle > 95:
                 cam1.camRight()
                 turnLeftFlag = 1
                 turnLeft()
             else:
                 angleRight()
         elif label == 'right':
-            if cam1.tiltAngle < 95:
+            if cam1.panAngle < 85:
                 cam1.camLeft()
                 turnRightFlag = 1
                 turnRight()
