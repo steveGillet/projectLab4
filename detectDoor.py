@@ -12,7 +12,7 @@ from adafruit_servokit import ServoKit
 def timer_function(duration):
     print(duration)
     global flag
-    time.sleep(duration)
+    time.sleep(abs(duration))
     stop()
     flag = False
 
@@ -146,12 +146,12 @@ frameCenterY = 240
 
 lowerRedLow = np.array([0, 50, 50])
 upperRedLow = np.array([10, 255, 255])
-lowerRedHigh = np.array([170, 50, 50])
+lowerRedHigh = np.array([175, 50, 50])
 upperRedHigh = np.array([180, 255, 255])
-lowerOrange = np.array([3,50,80])
-upperOrange = np.array([15, 200, 170])
-lowerCardboard = np.array([155, 30, 90])
-upperCardboard = np.array([180, 60, 135])
+lowerOrange = np.array([2,50,80])
+upperOrange = np.array([15, 210, 120])
+lowerCardboard = np.array([165, 25, 80])
+upperCardboard = np.array([180, 90, 165])
 
 redFlag = 0
 minWidthCardboard = 100
@@ -217,26 +217,31 @@ while True:
                     adjust_pan_tilt_servos(dx, dy)
                     if cam1.panAngle < 85 and not flag:
                         turnRight()
-                        # print('left')
-                        # offCenterX = frameCenterX - centerX
-                        # # # Create a timer thread that will execute the timer_function after 5 seconds
-                        # timer = threading.Thread(target=timer_function, args=(.00135*offCenterX,))
-                        # # # Start the timer thread
-                        # timer.start()
-                        # flag = True
+                        print('right')
+                        # # Create a timer thread that will execute the timer_function after 5 seconds
+                        timer = threading.Thread(target=timer_function, args=(.00135*dx,))
+                        # # Start the timer thread
+                        timer.start()
+                        flag = True
                         
                     elif cam1.panAngle > 95 and not flag:
                         turnLeft()
-                        # print('right')
-                        # offCenterX = centerX - frameCenterX
-                        # # # Create a timer thread that will execute the timer_function after 5 seconds
-                        # timer = threading.Thread(target=timer_function, args=(.00135*offCenterX,))
+                        print('left')
+                        # # Create a timer thread that will execute the timer_function after 5 seconds
+                        timer = threading.Thread(target=timer_function, args=(.00135*dx,))
 
-                        # # # Start the timer thread
-                        # timer.start()
-                        # flag = True
+                        # # Start the timer thread
+                        timer.start()
+                        flag = True
                     else:
                         forward()
+                        print('forward')
+                        # # Create a timer thread that will execute the timer_function after 5 seconds
+                        timer = threading.Thread(target=timer_function, args=(1,))
+
+                        # # Start the timer thread
+                        timer.start()
+                        flag = True
     if redFlag <= 3:
 
         # Convert the frame to the HSV color space
@@ -264,8 +269,10 @@ while True:
                 dy = centerY - frameCenterY 
                 adjust_pan_tilt_servos(dx, dy)
         if cam1.panAngle < 170:
+            print('cardboard turn')
             turnRight()
         else:
+            print('cardboard angle')
             angleLeft()
         
 
