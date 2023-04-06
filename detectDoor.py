@@ -7,6 +7,7 @@ import digitalio
 import busio
 from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
+from simple_pid import PID
 
 # Define a function that will be executed by the timer thread
 def timer_function(duration):
@@ -125,19 +126,28 @@ def angleLeft():
     pca.channels[ena].duty_cycle = 0x7FFF
     pca.channels[enb].duty_cycle = 0x5FFF
 
+# Create PID controllers for pan and tilt servos
+pan_pid = PID(0.01, 0, 0, setpoint=0)
+tilt_pid = PID(0.01, 0, 0, setpoint=0)
+
+# Update the adjust_pan_tilt_servos function to use the PID controller
 def adjust_pan_tilt_servos(dx, dy):
+    # Calculate the pan and tilt output using the PID controller
+    pan_output = pan_pid(dx)
+    tilt_output = tilt_pid(dy)
 
-    pan_output = 2*np.sign(dx)
-    tilt_output = 2*np.sign(dy)
-
-    cam1.panAngle -= pan_output
-    cam1.tiltAngle += tilt_output
-
+    cam1.panAngle += pan_output
+    cam1.tiltAngle -= tilt_output
+    # if cam1.panAngle < 0 or cam1.tiltAngle > 180:
+    #     turnRight()
+    # elif cam1.panAngle > 180
+    #     turnLeft()
     cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
     cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
 
     kit.servo[panPin].angle = cam1.panAngle
     kit.servo[tiltPin].angle = cam1.tiltAngle
+
 
 cap = cv2.VideoCapture(0)
 
