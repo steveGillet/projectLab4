@@ -9,11 +9,13 @@ from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 from simple_pid import PID
 
+movement_pid = PID(0.001, 0, 0, setpoint=0, output_limits=(-1, 1))
+
 # Define a function that will be executed by the timer thread
 def timer_function(duration):
     print(duration)
     global flag
-    time.sleep(abs(duration))
+    time.sleep(abs(movement_pid(duration)))
     stop()
     flag = False
 
