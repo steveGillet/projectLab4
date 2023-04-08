@@ -11,23 +11,26 @@ from adafruit_servokit import ServoKit
 
 # Set channels to the number of servo channels on your kit.
 # 8 for FeatherWing, 16 for Shield/HAT/Bonnet.
-kit = ServoKit(channels=16)
+panPin = 15
+tiltPin = 14
+
 class cam:
     def __init__(self):
         self.panAngle = 90
-        self.tiltAngle = 100
-        kit.servo[0].angle=self.panAngle
-        kit.servo[1].angle=self.tiltAngle
-    def camForward(self):
+        self.tiltAngle = 90
         self.panAngle = 90
-        kit.servo[0].angle=self.panAngle
+        kit.servo[panPin].angle=self.panAngle
+        kit.servo[tiltPin].angle=self.tiltAngle
     def camLeft(self):
         self.panAngle = 180
-        kit.servo[0].angle=self.panAngle
+        kit.servo[panPin].angle=self.panAngle
     def camRight(self):
         self.panAngle = 0
-        kit.servo[0].angle=self.panAngle
-cam1 = cam()
+        kit.servo[panPin].angle=self.panAngle
+    def camForward(self):
+        self.panAngle = 90
+        kit.servo[panPin].angle=self.panAngle
+
 
 in1 = digitalio.DigitalInOut(board.D15)
 in2 = digitalio.DigitalInOut(board.D24)
@@ -45,6 +48,12 @@ pca = PCA9685(i2c)
 
 # Set the PWM frequency to 60hz.
 pca.frequency = 60
+
+kit = ServoKit(channels=16)
+kit.servo[panPin].set_pulse_width_range(500,2500)
+kit.servo[tiltPin].set_pulse_width_range(500,2500)
+
+cam1 = cam()
 
 # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
 # but the PCA9685 will only actually give 12 bits of resolution.
@@ -118,8 +127,8 @@ def adjust_pan_tilt_servos(dx, dy):
     cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
     cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
 
-    kit.servo[0].angle = cam1.panAngle
-    kit.servo[1].angle = cam1.tiltAngle
+    kit.servo[panPin].angle = cam1.panAngle
+    kit.servo[tiltPin].angle = cam1.tiltAngle
 
 model = keras.models.load_model('cnn_model.h5')
 
@@ -221,7 +230,8 @@ while True:
                 turnRightFlag = 1
                 turnRight()
             else:
-                angleLeft()          
+                angleLeft()   
+    time.sleep(.1)                   
 
 # Clean up the camera and OpenCV resources
 cv2.destroyAllWindows()
