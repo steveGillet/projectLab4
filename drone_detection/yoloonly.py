@@ -7,6 +7,7 @@ from adafruit_servokit import ServoKit
 import numpy as np
 from adafruit_pca9685 import PCA9685
 import busio
+from simple_pid import PID
 
 kit=ServoKit(channels=16)
 
@@ -20,35 +21,52 @@ frame_height = 480
 frame_center_x = 320
 frame_center_y = 240
 
-pan_angle = 90
-tilt_angle = 90
-kit.servo[0].angle = pan_angle
-kit.servo[1].angle = tilt_angle
+panPin = 15
+tiltPin = 14
 
-# Initialize the previous positions to zero
-prev_dx, prev_dy = 0, 0
+kit = ServoKit(channels=16)
+kit.servo[panPin].set_pulse_width_range(500,2500)
+kit.servo[tiltPin].set_pulse_width_range(500,2500)
 
+    # Create PID controllers for pan and tilt servos
+pan_pid = PID(0.01, 0, 0, setpoint=0)
+tilt_pid = PID(0.01, 0, 0, setpoint=0)
+
+class cam:
+    def __init__(self):
+        self.panAngle = 90
+        self.tiltAngle = 90
+        kit.servo[panPin].angle=self.panAngle
+        kit.servo[tiltPin].angle=self.tiltAngle
+    def camLeft(self):
+        self.panAngle = 180
+        kit.servo[panPin].angle=self.panAngle
+    def camRight(self):
+        self.panAngle = 0
+        kit.servo[panPin].angle=self.panAngle
+    def camForward(self):
+        self.panAngle = 90
+        kit.servo[panPin].angle=self.panAngle
+
+# Update the adjust_pan_tilt_servos function to use the PID controller
 def adjust_pan_tilt_servos(dx, dy):
-    global pan_angle
-    global tilt_angle
-    global prev_dx
-    global prev_dy
-    changeSpeed = 2 + (abs(dx) + abs(dy)) // 50  # Increase speed when the object is far from the center
-    # Smooth the servo's movement using a low-pass filter
-    dx_smooth = 0.5 * dx + 0.5 * prev_dx
-    dy_smooth = 0.5 * dy + 0.5 * prev_dy
-    pan_angle -= changeSpeed * np.sign(dx_smooth)
-    tilt_angle += changeSpeed * np.sign(dy_smooth)  # Reverse the sign of dy
-    # Clamp the angles to avoid exceeding the servo limits
-    pan_angle = np.clip(pan_angle, 0, 180)
-    tilt_angle = np.clip(tilt_angle, 0, 180)
+    # Calculate the pan and tilt output using the PID controller
+    pan_output = pan_pid(dx)
+    tilt_output = tilt_pid(dy)
 
-    # Set the new angles for the servos
-    kit.servo[0].angle = pan_angle
-    kit.servo[1].angle = tilt_angle
-    
-    # Update the previous positions
-    prev_dx, prev_dy = dx_smooth, dy_smooth
+    cam1.panAngle += pan_output
+    cam1.tiltAngle -= tilt_output
+    # if cam1.panAngle < 0 or cam1.tiltAngle > 180:
+    #     turnRight()
+    # elif cam1.panAngle > 180
+    #     turnLeft()
+    cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
+    cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
+
+    kit.servo[panPin].angle = cam1.panAngle
+    kit.servo[tiltPin].angle = cam1.tiltAngle
+
+cam1 = cam()
 
 while True:
     results = model.track(source="0", show=True, stream=True)

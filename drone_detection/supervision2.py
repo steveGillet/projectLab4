@@ -6,10 +6,11 @@ import board
 import busio
 from simple_pid import PID
 from adafruit_pca9685 import PCA9685
+from adafruit_servokit import ServoKit
+import numpy as np
 
-
-desired_distance = 1.0 # 1 meters
-pid_distance = PID(0.1, 0.01, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
+desired_distance = .5 # 1 meters
+pid_distance = PID(1, 0.01, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
 
 
 in1 = digitalio.DigitalInOut(board.D15)
@@ -30,6 +31,24 @@ i2c = busio.I2C(board.SCL, board.SDA)
 pca = PCA9685(i2c)
 pca.frequency = 60
 
+panPin = 15
+tiltPin = 14
+
+class cam:
+    def __init__(self):
+        self.panAngle = 90
+        self.tiltAngle = 90
+        kit.servo[panPin].angle=self.panAngle
+        kit.servo[tiltPin].angle=self.tiltAngle
+    def camLeft(self):
+        self.panAngle = 180
+        kit.servo[panPin].angle=self.panAngle
+    def camRight(self):
+        self.panAngle = 0
+        kit.servo[panPin].angle=self.panAngle
+    def camForward(self):
+        self.panAngle = 90
+        kit.servo[panPin].angle=self.panAngle
 
 def forward(speed):
     in1.value = False
@@ -57,6 +76,33 @@ def stop():
     pca.channels[ena].duty_cycle = 0x0000
     pca.channels[enb].duty_cycle = 0x0000
 
+kit = ServoKit(channels=16)
+kit.servo[panPin].set_pulse_width_range(500,2500)
+kit.servo[tiltPin].set_pulse_width_range(500,2500)
+
+    # Create PID controllers for pan and tilt servos
+pan_pid = PID(0.01, 0, 0, setpoint=0)
+tilt_pid = PID(0.01, 0, 0, setpoint=0)
+
+# Update the adjust_pan_tilt_servos function to use the PID controller
+def adjust_pan_tilt_servos(dx, dy):
+    # Calculate the pan and tilt output using the PID controller
+    pan_output = pan_pid(dx)
+    tilt_output = tilt_pid(dy)
+
+    cam1.panAngle += pan_output
+    cam1.tiltAngle -= tilt_output
+    # if cam1.panAngle < 0 or cam1.tiltAngle > 180:
+    #     turnRight()
+    # elif cam1.panAngle > 180
+    #     turnLeft()
+    cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
+    cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
+
+    kit.servo[panPin].angle = cam1.panAngle
+    kit.servo[tiltPin].angle = cam1.tiltAngle
+
+cam1 = cam()
 
 def main():
     box_annotator = sv.BoxAnnotator(
@@ -65,9 +111,9 @@ def main():
         text_scale=0.5,
     )
     
-    model = YOLO("D:\downloads\\best.pt")
+    model = YOLO("best.onnx")
     
-    for result in model.track(source="D:\downloads\IMG_0637.mov", show=False, stream=True, tracker="bytetrack.yaml"):
+    for result in model.track(source="0", show=False, stream=True, tracker="bytetrack.yaml"):
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)        
 
@@ -75,7 +121,7 @@ def main():
             detections.tracker_id = result.boxes.id.cpu().numpy() .astype(int)
 
         lables = [
-            f"#{tracker_id}{model.model.names[class_id]} {confidence:.2f}"
+            f"#{tracker_id}{class_id} {confidence:.2f}"
             for xyxy, confidence, class_id, tracker_id
             in detections
         ]
@@ -87,8 +133,11 @@ def main():
             centerY = y1 + (y2 - y1) / 2
             centerFrameX = 320
             centerFrameY = 240
-            print(centerFrameX - centerX)
-            print(centerFrameY - centerY)
+            # print(centerFrameX - centerX)
+            # print(centerFrameY - centerY)
+            dx = centerX - centerFrameX
+            dy = centerY - centerFrameY 
+            adjust_pan_tilt_servos(dx, dy)
         
             #Camera parameters
             focal_length = 730  # C920 webcam focal length 3.9mm??
@@ -97,11 +146,12 @@ def main():
             drone_pixel_width = x2 - x1
             distance = (drone_real_width * focal_length) / drone_pixel_width
             error_distance = pid_distance(distance)
-            #print(f"{distance:.2f} m")
-            if error_distance > 0:
-                forward(error_distance)
-            elif error_distance < 0:
-                backward(-error_distance)
+            print(f"{distance:.2f} m")
+            print(error_distance)
+            if error_distance < 0:
+                forward(abs(error_distance))
+            elif error_distance > 0:
+                backward(abs(error_distance))
             else:
                 stop()
 
