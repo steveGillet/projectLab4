@@ -144,7 +144,7 @@ pid_tilt = PID(0.1, 0.01, 0.01) # PID parameters for tilt servo, need to adjust 
 
   
 while True:
-    results = model.track(source = "D:\downloads\IMG_0637.mov",show=True, stream=True, tracker = "bytetrack.yaml") # Added YOLO Tracker
+    results = model.track(source = "0",show=True, stream=True, tracker = "bytetrack.yaml") # Added YOLO Tracker
     for i, (result) in enumerate(results):
         boxes = result.boxes
         for box in boxes:
