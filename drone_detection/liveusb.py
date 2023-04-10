@@ -4,7 +4,11 @@ from ultralytics import YOLO
 
 model = YOLO("D:\downloads\\best.pt")
 
-results = model.track(source="D:\downloads\IMG_0637.mov",show=True, tracker="bytetrack.yaml")  
+for results in model.track(source="D:\downloads\IMG_0637.mov",show=False, stream=True, tracker="bytetrack.yaml"):
+    frame = results.orig_img
+    cv2.imshow("yolov8", frame)
+    if (cv2.waitKey(30) == 27):
+        break
 
 # import cv2
 # from ultralytics import YOLO

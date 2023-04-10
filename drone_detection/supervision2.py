@@ -1,6 +1,55 @@
 import cv2
 from ultralytics import YOLO
 import supervision as sv
+import digitalio
+import board
+import busio
+from simple_pid import PID
+from adafruit_pca9685 import PCA9685
+
+in1 = digitalio.DigitalInOut(board.D15)
+in2 = digitalio.DigitalInOut(board.D24)
+in3 = digitalio.DigitalInOut(board.D22)
+in4 = digitalio.DigitalInOut(board.D23)
+ena = 2
+enb = 3
+
+in1.direction = digitalio.Direction.OUTPUT
+in2.direction = digitalio.Direction.OUTPUT
+in3.direction = digitalio.Direction.OUTPUT
+in4.direction = digitalio.Direction.OUTPUT
+
+i2c = busio.I2C(board.SCL, board.SDA)
+
+#Set the PWM frequency to 60hz
+pca = PCA9685(i2c)
+pca.frequency = 60
+
+
+def forward():
+    in1.value = False
+    in2.value = True
+    in3.value = False
+    in4.value = True
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
+
+def backward():
+    in1.value = True
+    in2.value = False
+    in3.value = True
+    in4.value = False
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF
+
+def stop():
+    in1.value = False
+    in2.value = False
+    in3.value = False
+    in4.value = False
+    pca.channels[ena].duty_cycle = 0x0000
+    pca.channels[enb].duty_cycle = 0x0000
+
 
 def main():
     box_annotator = sv.BoxAnnotator(
@@ -9,9 +58,9 @@ def main():
         text_scale=0.5,
     )
     
-    model = YOLO("best.pt")
+    model = YOLO("D:\downloads\\best.pt")
     
-    for result in model.track(source=0, show=False, stream=True, tracker="bytetrack.yaml"):
+    for result in model.track(source="D:\downloads\IMG_0637.mov", show=False, stream=True, tracker="bytetrack.yaml"):
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)        
 
@@ -40,7 +89,16 @@ def main():
 
             drone_pixel_width = x2 - x1
             distance = (drone_real_width * focal_length) / drone_pixel_width
-            print(f"{distance:.2f}")
+            #print(f"{distance:.2f} m")
+            if distance > 1:
+                forward()
+            else:
+                stop()
+
+            if distance < 1:
+                backward()
+            else:
+                stop()
 
         cv2.imshow("yolov8", frame)
         if (cv2.waitKey(30) == 27):
