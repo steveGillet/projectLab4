@@ -7,6 +7,11 @@ import busio
 from simple_pid import PID
 from adafruit_pca9685 import PCA9685
 
+
+desired_distance = 1.0 # 1 meters
+pid_distance = PID(0.1, 0.01, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
+
+
 in1 = digitalio.DigitalInOut(board.D15)
 in2 = digitalio.DigitalInOut(board.D24)
 in3 = digitalio.DigitalInOut(board.D22)
@@ -26,21 +31,23 @@ pca = PCA9685(i2c)
 pca.frequency = 60
 
 
-def forward():
+def forward(speed):
     in1.value = False
     in2.value = True
     in3.value = False
     in4.value = True
-    pca.channels[ena].duty_cycle = 0x7FFF
-    pca.channels[enb].duty_cycle = 0x7FFF
+    speed = int(speed * 0x7FFF)
+    pca.channels[ena].duty_cycle = speed
+    pca.channels[enb].duty_cycle = speed
 
-def backward():
+def backward(speed):
     in1.value = True
     in2.value = False
     in3.value = True
     in4.value = False
-    pca.channels[ena].duty_cycle = 0x7FFF
-    pca.channels[enb].duty_cycle = 0x7FFF
+    speed = int(speed * 0x7FFF)
+    pca.channels[ena].duty_cycle = speed
+    pca.channels[enb].duty_cycle = speed
 
 def stop():
     in1.value = False
@@ -89,14 +96,12 @@ def main():
 
             drone_pixel_width = x2 - x1
             distance = (drone_real_width * focal_length) / drone_pixel_width
+            error_distance = pid_distance(distance)
             #print(f"{distance:.2f} m")
-            if distance > 1:
-                forward()
-            else:
-                stop()
-
-            if distance < 1:
-                backward()
+            if error_distance > 0:
+                forward(error_distance)
+            elif error_distance < 0:
+                backward(-error_distance)
             else:
                 stop()
 
