@@ -9,7 +9,7 @@ from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 from simple_pid import PID
 
-movement_pid = PID(0.001, 0, 0, setpoint=0, output_limits=(-1, 1))
+movement_pid = PID(1, 0, 0, setpoint=0, output_limits=(-1, 1))
 
 # Define a function that will be executed by the timer thread
 def timer_function(duration):
@@ -150,6 +150,10 @@ def adjust_pan_tilt_servos(dx, dy):
     kit.servo[panPin].angle = cam1.panAngle
     kit.servo[tiltPin].angle = cam1.tiltAngle
 
+def equalizeHistograms(hsvImage):
+    h, s, v = cv2.split(hsvImage)
+    v = cv2.equalizeHist(v)
+    return cv2.merge((h,s,v))
 
 cap = cv2.VideoCapture(0)
 
@@ -168,22 +172,34 @@ upperCardboard = np.array([180, 90, 165])
 redFlag = 0
 minWidthCardboard = 100
 
+look_for_qr_code = False
+frameCounter = 0
 while True:
+    frameCounter += 1
     _, frame = cap.read()
 
-    try:
-        detect = cv2.QRCodeDetector()
-        qrCodeValue, points, straight_qrcode = detect.detectAndDecode(frame)
-        
-        if qrCodeValue:
-            print(qrCodeValue)
-            stop()
-            break
-    except:
-        pass
+    if look_for_qr_code:
+        print('looking for qr code')
+        # Set the tilt angle to look up
+        cam1.tiltAngle = 45
+        kit.servo[tiltPin].angle = cam1.tiltAngle
+
+        # Search for the QR code
+        try:
+            detect = cv2.QRCodeDetector()
+            qrCodeValue, points, straight_qrcode = detect.detectAndDecode(frame)
+
+            if qrCodeValue:
+                print(qrCodeValue)
+                stop()
+                break
+        except:
+            pass
 
     # Convert the frame to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    hsv = equalizeHistograms(hsv)
 
     # Define the lower and upper bounds of the red color
 
@@ -217,6 +233,8 @@ while True:
             aspect_ratio = float(w)/h
             # print(w)
             if w>= 12*25:
+                if w * h > 2000000:
+                    look_for_qr_code = True
                 red_pixels = cv2.countNonZero(mask[y:y+h, x:x+w])
                 if red_pixels > 0.2 * w * h:
                     redFlag += 1
@@ -254,38 +272,41 @@ while True:
                         # # Start the timer thread
                         timer.start()
                         flag = True
-    if redFlag <= 3:
+    if frameCounter > 5:
+        if redFlag <= 3:
 
-        # Convert the frame to the HSV color space
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            # Convert the frame to the HSV color space
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        # Threshold the frame to extract the lighter object
-        mask = cv2.inRange(hsv, lowerCardboard, upperCardboard)
+            hsv = equalizeHistograms(hsv)
 
-        # Find contours in the binary mask
-        contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # Threshold the frame to extract the lighter object
+            mask = cv2.inRange(hsv, lowerCardboard, upperCardboard)
 
-        # Loop through each contour
-        for cnt in contours:
-            # Calculate the bounding box of the contour
-            x, y, w, h = cv2.boundingRect(cnt)
+            # Find contours in the binary mask
+            contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-            # If the width of the bounding box is greater than the minimum width and the height is less than or equal to the width (assuming the box is wider than it is tall)
-            if w >= minWidthCardboard and h <= w:
-                # Draw a rectangle around the bounding box
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                
-                centerX = x + w / 2
-                centerY = y + h / 2
-                dx = centerX - frameCenterX
-                dy = centerY - frameCenterY 
-                adjust_pan_tilt_servos(dx, dy)
-        if cam1.panAngle < 170:
-            print('cardboard turn')
-            turnRight()
-        else:
-            print('cardboard angle')
-            angleLeft()
+            # Loop through each contour
+            for cnt in contours:
+                # Calculate the bounding box of the contour
+                x, y, w, h = cv2.boundingRect(cnt)
+
+                # If the width of the bounding box is greater than the minimum width and the height is less than or equal to the width (assuming the box is wider than it is tall)
+                if w >= minWidthCardboard and h <= w:
+                    # Draw a rectangle around the bounding box
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                    
+                    centerX = x + w / 2
+                    centerY = y + h / 2
+                    dx = centerX - frameCenterX
+                    dy = centerY - frameCenterY 
+                    adjust_pan_tilt_servos(dx, dy)
+                    if cam1.panAngle < 170:
+                        print('cardboard turn')
+                        turnRight()
+                    else:
+                        print('cardboard angle')
+                        angleLeft()
         
 
     # Show the image
