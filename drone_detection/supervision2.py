@@ -8,8 +8,8 @@ from simple_pid import PID
 from adafruit_pca9685 import PCA9685
 
 
-desired_distance = 1.0 # 1 meters
-pid_distance = PID(0.1, 0.01, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
+desired_distance = 0.5 # 1 meters
+pid_distance = PID(1, 0.1, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
 
 
 in1 = digitalio.DigitalInOut(board.D15)
