@@ -9,6 +9,9 @@ from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 import numpy as np
 
+
+desired_distance = 0.5 # 1 meters
+pid_distance = PID(1, 0.1, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
 desired_distance = .5 # 1 meters
 pid_distance = PID(1, 0.01, 0.01, setpoint=desired_distance, output_limits=(-1, 1), sample_time=0.01)
 
