@@ -18,11 +18,9 @@ def main():
     drone.connect()
     drone.streamon()
 
-    field_width = 9
-    field_length = 6
-    increment = 1  # 1 meter increment
-
-    drone_x, drone_y = 0,0
+    field_width = 300
+    field_length = 200
+    increment = 50  # 1 meter increment (Tello uses centimeters)
 
     boxes = []
     found_boxes = 0
@@ -34,18 +32,24 @@ def main():
     # Lawnmower pattern
     for x in range(0, field_width, increment):
         for y in range(0, field_length, increment):
-
-            # update the drone position
-            drone_x += x
-            drone_y += y
-
             # Move to next position
-            drone.move_to(drone_x + x, drone_y + y, drone.get_height())
-            time.sleep(1)
+            if x != drone_x:
+                delta_x = x - drone_x
+                if delta_x > 0:
+                    drone.move_right(delta_x)
+                else:
+                    drone.move_left(-delta_x)
+                drone_x = x
+                time.sleep(1)
 
-
-            print(drone_x)
-            print(drone_y)
+            if y != drone_y:
+                delta_y = y - drone_y
+                if delta_y > 0:
+                    drone.move_forward(delta_y)
+                else:
+                    drone.move_back(-delta_y)
+                drone_y = y
+                time.sleep(1)
 
             # Capture frame
             frame = drone.get_frame_read().frame
@@ -57,7 +61,7 @@ def main():
             for obj in decoded_objects:
                 box_id = obj.data.decode('utf-8')
                 if box_id in {'a', 'b', 'c', 'd', 'e', 'f'}:
-                    box = get_coordinates(drone, box_id)
+                    box = get_coordinates(drone_x, drone_y, box_id)
                     boxes.append(box)
                     found_boxes += 1
 
@@ -71,6 +75,9 @@ def main():
     drone.end()
 
     print("Found boxes:", boxes)
+
+def get_coordinates(drone_x, drone_y, box_id):
+    return {'id': box_id, 'x': drone_x/100, 'y': drone_y/100}
 
 if __name__ == "__main__":
     main()
