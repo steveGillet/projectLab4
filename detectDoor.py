@@ -46,8 +46,8 @@ def readBox():
             kit.servo[panPin].angle=self.panAngle
 
 
-    in1 = digitalio.DigitalInOut(board.D15)
-    in2 = digitalio.DigitalInOut(board.D24)
+    in1 = digitalio.DigitalInOut(board.D24)
+    in2 = digitalio.DigitalInOut(board.D15)
     in3 = digitalio.DigitalInOut(board.D22)
     in4 = digitalio.DigitalInOut(board.D23)
 
