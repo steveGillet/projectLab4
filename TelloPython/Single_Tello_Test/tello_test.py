@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import time
 
-def flyDrone():
+def flyDrone(tello):
     start_time = str(datetime.now())
 
     file_name = sys.argv[1]
@@ -11,14 +11,14 @@ def flyDrone():
     f = open(file_name, "r")
     commands = f.readlines()
 
-    tello = Tello()
+    # tello = Tello()
 
-    tello.send_command('command')
-    tello.send_command('streamon')
-    tello.send_command('takeoff')
-    tello.send_command('speed 100')
+    # tello.send_command('command')
+    # tello.send_command('streamon')
+    # tello.send_command('takeoff')
+    # tello.send_command('speed 100')
 
-    time.sleep(1)
+    # time.sleep(1)
 
 
     # print(commands)
