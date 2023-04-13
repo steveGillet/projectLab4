@@ -1,7 +1,7 @@
 import socket
 import threading
 import time
-# from stats import Stats
+from stats import Stats
 import datetime
 import cv2
 import os
@@ -45,6 +45,7 @@ class Tello:
         self.qrCodeValue = None
         self.readQRcodeThread = threading.Thread(target=self._readQRcode)
         self.readQRcodeThread.daemon = True
+        self.nextQRcode = None
 
         self.readQRcodeThread.start()
 
@@ -151,8 +152,8 @@ class Tello:
                 detect = cv2.QRCodeDetector()
                 self.qrCodeValue, points, straight_qrcode = detect.detectAndDecode(img)
                 
-                if self.qrCodeValue == "D":
-                    print('FOUND D')
+                if self.qrCodeValue == self.nextQRcode:
+                    print(f'FOUND {self.qrCodeValue}')
                     self.foundFlag = True
             except:
                 pass

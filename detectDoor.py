@@ -8,8 +8,9 @@ import busio
 from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 from simple_pid import PID
+import pyzbar.pyzbar as pyzbar
 
-def readBox():
+def readBox(tello):
 
     movement_pid = PID(1, 0, 0, setpoint=0, output_limits=(-1, 1))
 
@@ -176,25 +177,31 @@ def readBox():
 
     look_for_qr_code = False
     frameCounter = 0
-    while True:
+    foundFlag = 0
+    while not foundFlag:
         frameCounter += 1
         _, frame = cap.read()
 
         if look_for_qr_code:
             print('looking for qr code')
             # Set the tilt angle to look up
-            cam1.tiltAngle = 45
+            cam1.tiltAngle = 40
             kit.servo[tiltPin].angle = cam1.tiltAngle
 
             # Search for the QR code
             try:
+                # detect = pyzbar.decode(frame)
+                # qrCodeValue = None
+                # for obj in detect:
+                #     qrCodeValue = obj.data.decode('utf-8')
                 detect = cv2.QRCodeDetector()
                 qrCodeValue, points, straight_qrcode = detect.detectAndDecode(frame)
 
                 if qrCodeValue:
                     print(qrCodeValue)
+                    tello.nextQRcode = qrCodeValue
                     stop()
-                    break
+                    foundFlag = 1
             except:
                 pass
 
@@ -235,7 +242,8 @@ def readBox():
                 aspect_ratio = float(w)/h
                 # print(w)
                 if w>= 12*25:
-                    if w * h > 2000000:
+                    print(w*h)
+                    if w * h > 280000:
                         look_for_qr_code = True
                     red_pixels = cv2.countNonZero(mask[y:y+h, x:x+w])
                     if red_pixels > 0.2 * w * h:
@@ -322,3 +330,6 @@ def readBox():
 
     cap.release()
     cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    readBox()

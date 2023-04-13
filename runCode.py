@@ -14,6 +14,16 @@ from TelloPython.Single_Tello_Test.tello_test import flyDrone
 import sys
 from datetime import datetime
 from detectDoor import readBox
+from drone_detection.supervision2 import supervision2
 
-# flyDrone()
-readBox()
+tello = Tello()
+
+tello.send_command('command')
+tello.send_command('streamon')
+tello.send_command('takeoff')
+tello.send_command('speed 100')
+
+readBox(tello)
+print('look for drone now')
+# supervision2()
+flyDrone()
