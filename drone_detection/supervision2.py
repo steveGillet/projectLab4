@@ -40,7 +40,7 @@ def supervision2():
     class cam:
         def __init__(self):
             self.panAngle = 90
-            self.tiltAngle = 90
+            self.tiltAngle = 180
             kit.servo[panPin].angle=self.panAngle
             kit.servo[tiltPin].angle=self.tiltAngle
         def camLeft(self):
@@ -106,6 +106,9 @@ def supervision2():
         kit.servo[tiltPin].angle = cam1.tiltAngle
 
     cam1 = cam()
+    backward()
+    time.sleep(2)
+    stop()
 
     def main():
         box_annotator = sv.BoxAnnotator(
