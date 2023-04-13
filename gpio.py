@@ -4,8 +4,9 @@ import busio
 from adafruit_pca9685 import PCA9685
 import time
 
-in1 = digitalio.DigitalInOut(board.D15)
-in2 = digitalio.DigitalInOut(board.D24)
+#green, blue, orange, yellow
+in1 = digitalio.DigitalInOut(board.D24)
+in2 = digitalio.DigitalInOut(board.D15)
 in3 = digitalio.DigitalInOut(board.D22)
 in4 = digitalio.DigitalInOut(board.D23)
 
