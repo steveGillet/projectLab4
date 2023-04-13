@@ -35,6 +35,135 @@ def run_supervision_and_fly():
     tello.send_command('takeoff')
     flyDrone(tello)
 
+class GroundBot:
+    panPin = 15
+    tiltPin = 14
+
+    class cam:
+        def __init__(self):
+            self.panAngle = 90
+            self.tiltAngle = 90
+            kit.servo[panPin].angle=self.panAngle
+            kit.servo[tiltPin].angle=self.tiltAngle
+        def camLeft(self):
+            self.panAngle = 180
+            kit.servo[panPin].angle=self.panAngle
+        def camRight(self):
+            self.panAngle = 0
+            kit.servo[panPin].angle=self.panAngle
+        def camForward(self):
+            self.panAngle = 90
+            kit.servo[panPin].angle=self.panAngle
+
+
+    in1 = digitalio.DigitalInOut(board.D24)
+    in2 = digitalio.DigitalInOut(board.D15)
+    in3 = digitalio.DigitalInOut(board.D22)
+    in4 = digitalio.DigitalInOut(board.D23)
+
+    in1.direction = digitalio.Direction.OUTPUT
+    in2.direction = digitalio.Direction.OUTPUT
+    in3.direction = digitalio.Direction.OUTPUT
+    in4.direction = digitalio.Direction.OUTPUT
+
+    i2c = busio.I2C(board.SCL, board.SDA)
+
+    pca = PCA9685(i2c)
+
+    # Set the PWM frequency to 60hz.
+    pca.frequency = 60
+
+    kit = ServoKit(channels=16)
+    kit.servo[panPin].set_pulse_width_range(500,2500)
+    kit.servo[tiltPin].set_pulse_width_range(500,2500)
+
+    cam1 = cam()
+
+    # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
+    # but the PCA9685 will only actually give 12 bits of resolution.
+    ena = 2
+    enb = 3
+
+    def stop():
+        in1.value = False
+        in2.value = False
+        in3.value = False
+        in4.value = False
+        pca.channels[ena].duty_cycle = 0x0000
+        pca.channels[enb].duty_cycle = 0x0000
+
+    def turnRight():
+        in1.value = True
+        in2.value = False
+        in3.value = False
+        in4.value = True
+        pca.channels[ena].duty_cycle = 0x7FFF
+        pca.channels[enb].duty_cycle = 0x7FFF
+
+    def turnLeft():
+        in1.value = False
+        in2.value = True
+        in3.value = True
+        in4.value = False
+        pca.channels[ena].duty_cycle = 0x7FFF
+        pca.channels[enb].duty_cycle = 0x7FFF
+
+    def backward():
+        in1.value = True
+        in2.value = False
+        in3.value = True
+        in4.value = False
+        pca.channels[ena].duty_cycle = 0x7FFF
+        pca.channels[enb].duty_cycle = 0x7FFF
+
+    def forward():
+        in1.value = False
+        in2.value = True
+        in3.value = False
+        in4.value = True
+        pca.channels[ena].duty_cycle = 0x7FFF
+        pca.channels[enb].duty_cycle = 0x7FFF
+
+    def angleRight():
+        in1.value = False
+        in2.value = True
+        in3.value = False
+        in4.value = True
+        pca.channels[ena].duty_cycle = 0x5FFF
+        pca.channels[enb].duty_cycle = 0x7FFF
+
+    def angleLeft():
+        in1.value = False
+        in2.value = True
+        in3.value = False
+        in4.value = True
+        pca.channels[ena].duty_cycle = 0x7FFF
+        pca.channels[enb].duty_cycle = 0x5FFF
+
+    # Create PID controllers for pan and tilt servos
+    pan_pid = PID(0.01, 0, 0, setpoint=0)
+    tilt_pid = PID(0.01, 0, 0, setpoint=0)
+
+    # Update the adjust_pan_tilt_servos function to use the PID controller
+    def adjust_pan_tilt_servos(dx, dy):
+        # Calculate the pan and tilt output using the PID controller
+        pan_output = pan_pid(dx)
+        tilt_output = tilt_pid(dy)
+
+        cam1.panAngle += pan_output
+        cam1.tiltAngle -= tilt_output
+        # if cam1.panAngle < 0 or cam1.tiltAngle > 180:
+        #     turnRight()
+        # elif cam1.panAngle > 180
+        #     turnLeft()
+        cam1.panAngle = np.clip(cam1.panAngle, 0, 180)
+        cam1.tiltAngle = np.clip(cam1.tiltAngle, 0, 180)
+
+        kit.servo[panPin].angle = cam1.panAngle
+        kit.servo[tiltPin].angle = cam1.tiltAngle
+
+groundBot = GroundBot()
+
 connect_to_tello_wifi('TELLO-995AD9')
 
 
