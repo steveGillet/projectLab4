@@ -7,6 +7,7 @@ import cv2
 import os
 import h264decoder
 import numpy as np
+from pyzbar.pyzbar import decode
 
 class Tello:
     def __init__(self):
@@ -148,13 +149,28 @@ class Tello:
     def _readQRcode(self):
         while True:
             try:
-                img = cv2.resize(self.frame, (500, 500))
-                detect = cv2.QRCodeDetector()
-                self.qrCodeValue, points, straight_qrcode = detect.detectAndDecode(img)
+                image = cv2.resize(self.frame, (500, 500))
+                gray_img = cv2.cvtColor(image,0)
+                barcode = decode(gray_img)
+
+                for obj in barcode:
+                    points = obj.polygon
+                    (x,y,w,h) = obj.rect
+                    pts = np.array(points, np.int32)
+                    pts = pts.reshape((-1, 1, 2))
+                    cv2.polylines(image, [pts], True, (0, 255, 0), 3)
+
+                    self.qrCodeValue = obj.data.decode("utf-8")
+                    barcodeType = obj.type
+                    string = "Data " + str(self.qrCodeValue) + " | Type " + str(barcodeType)
+                    
+                    cv2.putText(frame, string, (x,y), cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,0,0), 2)
+                    print("Barcode: "+self.qrCodeValue +" | Type: "+barcodeType)
                 
                 if self.qrCodeValue == self.nextQRcode:
                     print(f'FOUND {self.qrCodeValue}')
                     self.foundFlag = True
+                
             except:
                 pass
 
