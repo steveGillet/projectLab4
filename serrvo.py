@@ -15,8 +15,8 @@ kit = ServoKit(channels=16)
 # kit.servo[0].angle = 0
 # kit.continuous_servo[1].throttle = 0
 
-kit.servo[15].angle=90
-kit.servo[14].angle=90
+kit.servo[9].angle=90
+kit.servo[8].angle=90
 time.sleep(1)
 # kit.servo[0].angle=180
 # kit.servo[1].angle=0
