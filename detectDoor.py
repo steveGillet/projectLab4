@@ -10,7 +10,7 @@ from adafruit_servokit import ServoKit
 from simple_pid import PID
 from pyzbar.pyzbar import decode
 
-def readBox(tello, groundBot):
+def readBox(groundBot):
 
     movement_pid = PID(1, 0, 0, setpoint=0, output_limits=(-1, 1))
 
@@ -82,7 +82,7 @@ def readBox(tello, groundBot):
 
                     if qrCodeValue:
                         print(qrCodeValue)
-                        tello.nextQRcode = qrCodeValue
+                        groundBot.nextQRcode = qrCodeValue
                         groundBot.stop()
                         foundFlag = 1
             except Exception as e:

@@ -51,6 +51,14 @@ def turnLeft():
     pca.channels[ena].duty_cycle = 0x7FFF
     pca.channels[enb].duty_cycle = 0x7FFF
 
+def turnLeft():
+    in1.value = False
+    in2.value = True
+    in3.value = True
+    in4.value = False
+    pca.channels[ena].duty_cycle = 0x7FFF
+    pca.channels[enb].duty_cycle = 0x7FFF    
+
 def backward():
     in1.value = True
     in2.value = False
@@ -67,12 +75,18 @@ def forward():
     pca.channels[ena].duty_cycle = 0x7FFF
     pca.channels[enb].duty_cycle = 0x7FFF
 
+input()
+start_time = time.time()
 turnLeft()
-time.sleep(1)
-turnRight()
-time.sleep(1)
-forward()
-time.sleep(1)
-backward()
-time.sleep(1)
+input()
+end_time = time.time()
+time_taken = end_time - start_time
+print(f'Time taken to rotate 90 degrees: {time_taken} seconds')
+# time.sleep(1)
+# turnRight()
+# time.sleep(1)
+# forward()
+# time.sleep(1)
+# backward()
+# time.sleep(1)
 stop()

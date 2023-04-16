@@ -16,6 +16,7 @@ from datetime import datetime
 from detectDoor import readBox
 from drone_detection.supervision2 import supervision2
 import subprocess
+from drone_detection.robotmove import moveToPosition 
 
 def connect_to_tello_wifi(ssid, password=None):
     try:
@@ -68,6 +69,8 @@ class GroundBot:
         # Create PID controllers for pan and tilt servos
         self.pan_pid = PID(0.01, 0, 0, setpoint=0)
         self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
+
+        self.nextQRcode = None
 
     def stop(self):
         self.in1.value = False
@@ -172,14 +175,15 @@ groundBot = GroundBot()
 
 # time.sleep(1)
 
-tello = Tello()
+# tello = Tello()
 
 # tello.send_command('command')
 # tello.send_command('streamon')
 # tello.send_command('takeoff')
 # tello.send_command('speed 100')
 
-readBox(tello, groundBot)
+readBox(groundBot)
+moveToPosition(groundBot,coords)
 # print('look for drone now')
 # # Create two threads to run the functions simultaneously
 # t1 = threading.Thread(target=run_supervision_and_fly)
