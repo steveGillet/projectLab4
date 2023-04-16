@@ -8,6 +8,7 @@ from simple_pid import PID
 from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 import numpy as np
+import time
 
 def supervision2():
     desired_distance = 0.5 # 1 meters
