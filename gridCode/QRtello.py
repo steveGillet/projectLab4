@@ -23,6 +23,8 @@ def decoder(image):
 
         barcodeData = obj.data.decode("utf-8")
         print(barcodeData)
+        if barcodeData =='B':
+            print("Transfer")
         barcodeType = obj.type
         string = "Data " + str(barcodeData) + " | Type " + str(barcodeType)
         

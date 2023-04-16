@@ -2,11 +2,20 @@ import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
 from djitellopy import Tello
-
+import time
 # Initialize the Tello drone object
 tello = Tello()
 tello.connect()
+time.sleep(1)
 tello.streamon()
+time.sleep(2)
+tello.takeoff()
+time.sleep(2)
+height= tello.get_height()
+time.sleep(.5)
+Rheight=120-height
+tello.move_up(Rheight)
+
 
 def QR_tello(tello):
     while True:

@@ -6,38 +6,15 @@ import numpy as np
 import threading
 import queue
 
-def tellopath(x,y,tello):
-    global bar
 
+def tellopath(tello):
+    global xp, yp
     def waitfordrone():
         time.sleep(2)
     while tello.get_speed_x()>0 and tello.get_speed_y()>0 and tello.get_speed_z()>0:
         time.sleep(.01)
 
-    def getvalue():
-        
-        if bar.empty()== True:
-            pass
-        elif bar.empty() == False:
-            QR = bar.get()
-            if QR == 'A':
-                box_positions['ABOX'] = (x, y)
-                print(box_positions['ABOX'])
-            elif QR == 'B':
-                box_positions['BBOX'] = (x, y)
-                print(box_positions['BBOX'])
-            elif QR == 'C':
-                box_positions['CBOX'] = (x, y)
-                print(box_positions['CBOX'])
-            elif QR == 'D':
-                box_positions['DBOX'] = (x, y)
-                print(box_positions['DBOX'])
-            elif QR == 'E':
-                box_positions['EBOX'] = (x, y)
-                print(box_positions['EBOX'])
-            elif QR == 'F':
-                box_positions['FBOX'] = (x, y)
-                print(box_positions['FBOX'])
+ 
 
     # Make Drone takeoff
     tello.takeoff()
@@ -51,59 +28,59 @@ def tellopath(x,y,tello):
     # Move forward (For efficiency)
     tello.move_forward(38)
     waitfordrone()
-    y += 38
-    getvalue()
-    print("Current Position: {}, {}".format(x, y))
+    yp += 38
+    
+    print("Current Position: {}, {}".format(xp, yp))
 
     while True:
-        # Move forward in increments of 152 cm on Y axis
-        while y < 874 and (x == 0 or x ==244 or x==488):
+        # Move forward in increments of 152 cm on yp axpis
+        while yp < 874 and (xp == 0 or xp ==244 or xp==488):
             tello.move_forward(76)
             waitfordrone()
-            y += 76
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
-            if y == 874:
+            yp += 76
+            
+            print("Current Position: {}, {}".format(xp, yp))
+            if yp == 874:
                 break
             
             
-        # Move drone in X position
-        if y == 874:
+        # Move drone in xp position
+        if yp == 874:
             tello.move_right(122)
             waitfordrone()
-            x +=122
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
+            xp +=122
+            
+            print("Current Position: {}, {}".format(xp, yp))
             tello.move_back(76)
             waitfordrone()
-            y -=76
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
+            yp -=76
+            
+            print("Current Position: {}, {}".format(xp, yp))
             
             
 
-        if y == 38:
+        if yp == 38:
             tello.move_right(122)
             waitfordrone()
-            x +=122
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
+            xp +=122
+            
+            print("Current Position: {}, {}".format(xp, yp))
             tello.move_forward(76)
             waitfordrone()
-            y +=76
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
+            yp +=76
+            
+            print("Current Position: {}, {}".format(xp, yp))
 
-        # Move backward in increments of 152 cm on Y axis
-        while y > 38 and (x == 122 or x==366):
+        # Move backward in increments of 152 cm on yp axpis
+        while yp > 38 and (xp == 122 or xp==366):
             tello.move_back(76)
             waitfordrone()
-            y-=76
-            getvalue()
-            print("Current Position: {}, {}".format(x, y))
+            yp-=76
+            
+            print("Current Position: {}, {}".format(xp, yp))
         
 def QR_tello(tello):
-    global bar
+    global xp, yp, box_positions
     while True:
         # Get the Tello drone's camera feed
         frame = tello.get_frame_read().frame
@@ -121,7 +98,24 @@ def QR_tello(tello):
                 cv2.polylines(frame, [pts], True, (0, 255, 0), 3)
 
                 barcodeData = obj.data.decode("utf-8")
-                bar.put(barcodeData)
+                if barcodeData == 'A':
+                    box_positions['ABOX'] = (xp, yp)
+                    print(box_positions['ABOX'])
+                elif barcodeData == 'B':
+                    box_positions['BBOX'] = (xp, yp)
+                    print(box_positions['BBOX'])
+                elif barcodeData == 'C':
+                    box_positions['CBOX'] = (xp, yp)
+                    print(box_positions['CBOX'])
+                elif barcodeData == 'D':
+                    box_positions['DBOX'] = (xp, yp)
+                    print(box_positions['DBOX'])
+                elif barcodeData == 'E':
+                    box_positions['EBOX'] = (xp, yp)
+                    print(box_positions['EBOX'])
+                elif barcodeData == 'F':
+                    box_positions['FBOX'] = (xp, yp)
+                    print(box_positions['FBOX'])
                 barcodeType = obj.type
                 string = "Data " + str(barcodeData) + " | Type " + str(barcodeType)
             
@@ -143,8 +137,8 @@ box_positions = {'ABOX': (0, 0), 'BBOX': (0, 0), 'CBOX':(0,0), 'DBOX': (0,0), 'E
 bar = queue.LifoQueue()
 
 # Define starting position
-x = 0
-y = 0
+xp = 0
+yp = 0
 
 # Create Tello object/ Connect
 tello = Tello()
@@ -153,8 +147,9 @@ time.sleep(1)
 tello.streamon()
 time.sleep(1)
 
-t1 = threading.Thread(target=tellopath, args=(x, y, tello))
+t1 = threading.Thread(target=tellopath, args=(tello,))
 t2 = threading.Thread(target=QR_tello, args=(tello,))
 
 t1.start()
 t2.start()
+
