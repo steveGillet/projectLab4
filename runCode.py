@@ -17,6 +17,8 @@ from detectDoor import readBox
 from drone_detection.supervision2 import supervision2
 import subprocess
 from drone_detection.robotmove import moveToPosition 
+import adafruit_mpu6050
+from gridCode.WORKINGCODE import droneGrid
 
 def connect_to_tello_wifi(ssid, password=None):
     try:
@@ -71,6 +73,19 @@ class GroundBot:
         self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
 
         self.nextQRcode = None
+        
+        self.mpu = adafruit_mpu6050.MPU6050(self.i2c)
+
+        self.yaw = 0.000
+        self.running = True
+
+        self.yawThread = threading.Thread(target=self.updateYaw)
+        self.yawThread.start()
+        self.dt = 0.01
+
+        self.yaw_drift_correction = 0.00011
+
+        self.box_positions = {'ABOX': (0, 0), 'BBOX': (0, 0), 'CBOX':(0,0), 'DBOX': (0,0), 'EBOX': (0,0), 'FBOX':(0,0)}
 
     def stop(self):
         self.in1.value = False
@@ -149,6 +164,17 @@ class GroundBot:
             self.kit.servo[self.tiltPin].angle = self.cam1.tiltAngle
         except Exception as e:
             print(f"Error: {e}")
+    
+    def updateYaw(self):
+        # adjust this value based on how much the yaw drifts over time
+        
+        while self.running:
+            gyro = self.mpu.gyro
+            gyro_rad = [g * np.pi / 180 for g in gyro]  # Convert gyro data to radians
+            
+            self.yaw += (gyro_rad[2] + self.yaw_drift_correction) * self.dt  # Subtract the correction from the yaw
+            time.sleep(self.dt)
+
 class Cam:
     def __init__(self, kit, panPin, tiltPin):
         self.kit = kit
@@ -172,18 +198,11 @@ groundBot = GroundBot()
 
 # connect_to_tello_wifi('TELLO-995AD9')
 
-
-# time.sleep(1)
-
-# tello = Tello()
-
-# tello.send_command('command')
-# tello.send_command('streamon')
-# tello.send_command('takeoff')
-# tello.send_command('speed 100')
-
-readBox(groundBot)
-moveToPosition(groundBot,coords)
+droneGrid(groundBot)
+input()
+print(groundBot.box_positions)
+# readBox(groundBot)
+# moveToPosition(groundBot,[10,40])
 # print('look for drone now')
 # # Create two threads to run the functions simultaneously
 # t1 = threading.Thread(target=run_supervision_and_fly)
