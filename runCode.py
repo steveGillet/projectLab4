@@ -85,7 +85,7 @@ class GroundBot:
 
         self.yaw_drift_correction = 0.00011
 
-        self.box_positions = {'ABOX': (0, 0), 'BBOX': (0, 0), 'CBOX':(0,0), 'DBOX': (0,0), 'EBOX': (0,0), 'FBOX':(0,0)}
+        self.box_positions = {'A': (0, 0), 'B': (0, 0), 'C':(0,0), 'D': (0,0), 'E': (0,0), 'F':(0,0), 'DONE':(0,0)}
 
     def stop(self):
         self.in1.value = False
@@ -174,6 +174,11 @@ class GroundBot:
             
             self.yaw += (gyro_rad[2] + self.yaw_drift_correction) * self.dt  # Subtract the correction from the yaw
             time.sleep(self.dt)
+    
+    def waitForBoxPosition(self, boxKey):
+        while self.box_positions[boxKey] == (0, 0):
+            time.sleep(0.1)
+
 
 class Cam:
     def __init__(self, kit, panPin, tiltPin):
@@ -196,15 +201,43 @@ class Cam:
 
 groundBot = GroundBot()
 
-# connect_to_tello_wifi('TELLO-995AD9')
+connect_to_tello_wifi('TELLO-995AD9')
 
+print('drone searching')
 droneGrid(groundBot)
-input()
-print(groundBot.box_positions)
-# readBox(groundBot)
-# moveToPosition(groundBot,[10,40])
-# print('look for drone now')
-# # Create two threads to run the functions simultaneously
-# t1 = threading.Thread(target=run_supervision_and_fly)
-# t1.start()
-# t1.join()
+
+# while True:
+#     # Read the first box and get the nextQRcode value
+#     print('groundbot searching')
+#     readBox(groundBot)
+#     print('groundbot backing out')
+#     groundBot.backward()
+#     time.sleep(3)
+    
+#     if groundBot.yaw < 0.000:
+#         while groundBot.yaw < 0.000:
+#             groundBot.turnLeft()
+#             time.sleep(0.1)
+#         groundBot.stop()
+
+#     elif groundBot.yaw > 0.000:
+#         while groundBot.yaw > 0.000:
+#             groundBot.turnRight()
+#             time.sleep(0.1)
+#         groundBot.stop()
+
+#     print('groundbot waiting')
+#     # Wait for the corresponding box_positions variable to be updated
+#     groundBot.waitForBoxPosition(groundBot.nextQRcode)
+
+#     # Check if the nextQRcode value is 'done'
+#     if groundBot.nextQRcode == 'DONE':
+#         # Perform the action for the 'done' QR code
+#         moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
+
+#         # Break the loop
+#         break
+
+#     # Move to the position specified by the nextQRcode
+#     print('groundbot moving to next box')
+#     moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
