@@ -9,14 +9,16 @@ from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 from simple_pid import PID
 from ultralytics import YOLO
-from TelloPython.Single_Tello_Test.tello import Tello
-from TelloPython.Single_Tello_Test.tello_test import flyDrone
+# from TelloPython.Single_Tello_Test.tello import Tello
+# from TelloPython.Single_Tello_Test.tello_test import flyDrone
 import sys
 from datetime import datetime
 from detectDoor import readBox
 from drone_detection.supervision2 import supervision2
 import subprocess
 from drone_detection.robotmove import moveToPosition 
+import adafruit_mpu6050
+from gridCode.WORKINGCODE import droneGrid
 
 def connect_to_tello_wifi(ssid, password=None):
     try:
@@ -40,37 +42,50 @@ class GroundBot:
     def __init__(self):
         self.panPin = 9
         self.tiltPin = 8
-        self.in1 = digitalio.DigitalInOut(board.D24)
-        self.in2 = digitalio.DigitalInOut(board.D15)
-        self.in3 = digitalio.DigitalInOut(board.D22)
-        self.in4 = digitalio.DigitalInOut(board.D23)
+        # self.in1 = digitalio.DigitalInOut(board.D24)
+        # self.in2 = digitalio.DigitalInOut(board.D15)
+        # self.in3 = digitalio.DigitalInOut(board.D22)
+        # self.in4 = digitalio.DigitalInOut(board.D23)
 
-        self.in1.direction = digitalio.Direction.OUTPUT
-        self.in2.direction = digitalio.Direction.OUTPUT
-        self.in3.direction = digitalio.Direction.OUTPUT
-        self.in4.direction = digitalio.Direction.OUTPUT
-        self.i2c = busio.I2C(board.SCL, board.SDA)
+        # self.in1.direction = digitalio.Direction.OUTPUT
+        # self.in2.direction = digitalio.Direction.OUTPUT
+        # self.in3.direction = digitalio.Direction.OUTPUT
+        # self.in4.direction = digitalio.Direction.OUTPUT
+        # self.i2c = busio.I2C(board.SCL, board.SDA)
 
-        self.pca = PCA9685(self.i2c)
+        # self.pca = PCA9685(self.i2c)
 
         # Set the PWM frequency to 60hz.
-        self.pca.frequency = 60
-        self.kit = ServoKit(channels=16)
-        self.kit.servo[self.panPin].set_pulse_width_range(500,2500)
-        self.kit.servo[self.tiltPin].set_pulse_width_range(500,2500)
+        # self.pca.frequency = 60
+        # self.kit = ServoKit(channels=16)
+        # self.kit.servo[self.panPin].set_pulse_width_range(500,2500)
+        # self.kit.servo[self.tiltPin].set_pulse_width_range(500,2500)
 
-        self.cam1 = Cam(self.kit, self.panPin, self.tiltPin)
+        # self.cam1 = Cam(self.kit, self.panPin, self.tiltPin)
 
         # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
         # but the PCA9685 will only actually give 12 bits of resolution.
-        self.ena = 2
-        self.enb = 3
+        # self.ena = 2
+        # self.enb = 3
 
-        # Create PID controllers for pan and tilt servos
-        self.pan_pid = PID(0.01, 0, 0, setpoint=0)
-        self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
+        # # Create PID controllers for pan and tilt servos
+        # self.pan_pid = PID(0.01, 0, 0, setpoint=0)
+        # self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
 
-        self.nextQRcode = None
+        # self.nextQRcode = None
+        
+        # self.mpu = adafruit_mpu6050.MPU6050(self.i2c)
+
+        # self.yaw = 0.000
+        # self.running = True
+
+        # self.yawThread = threading.Thread(target=self.updateYaw)
+        # self.yawThread.start()
+        # self.dt = 0.01
+
+        # self.yaw_drift_correction = 0.00011
+
+        self.box_positions = {'A': (0, 0), 'B': (0, 0), 'C':(0,0), 'D': (0,0), 'E': (0,0), 'F':(0,0), 'DONE':(0,0)}
 
     def stop(self):
         self.in1.value = False
@@ -149,6 +164,22 @@ class GroundBot:
             self.kit.servo[self.tiltPin].angle = self.cam1.tiltAngle
         except Exception as e:
             print(f"Error: {e}")
+    
+    def updateYaw(self):
+        # adjust this value based on how much the yaw drifts over time
+        
+        while self.running:
+            gyro = self.mpu.gyro
+            gyro_rad = [g * np.pi / 180 for g in gyro]  # Convert gyro data to radians
+            
+            self.yaw += (gyro_rad[2] + self.yaw_drift_correction) * self.dt  # Subtract the correction from the yaw
+            time.sleep(self.dt)
+    
+    def waitForBoxPosition(self, boxKey):
+        while self.box_positions[boxKey] == (0, 0):
+            time.sleep(0.1)
+
+
 class Cam:
     def __init__(self, kit, panPin, tiltPin):
         self.kit = kit
@@ -170,22 +201,43 @@ class Cam:
 
 groundBot = GroundBot()
 
-# connect_to_tello_wifi('TELLO-995AD9')
+connect_to_tello_wifi('TELLO-995AD9')
 
+print('drone searching')
+droneGrid(groundBot)
 
-# time.sleep(1)
+# while True:
+#     # Read the first box and get the nextQRcode value
+#     print('groundbot searching')
+#     readBox(groundBot)
+#     print('groundbot backing out')
+#     groundBot.backward()
+#     time.sleep(3)
+    
+#     if groundBot.yaw < 0.000:
+#         while groundBot.yaw < 0.000:
+#             groundBot.turnLeft()
+#             time.sleep(0.1)
+#         groundBot.stop()
 
-# tello = Tello()
+#     elif groundBot.yaw > 0.000:
+#         while groundBot.yaw > 0.000:
+#             groundBot.turnRight()
+#             time.sleep(0.1)
+#         groundBot.stop()
 
-# tello.send_command('command')
-# tello.send_command('streamon')
-# tello.send_command('takeoff')
-# tello.send_command('speed 100')
+#     print('groundbot waiting')
+#     # Wait for the corresponding box_positions variable to be updated
+#     groundBot.waitForBoxPosition(groundBot.nextQRcode)
 
-readBox(groundBot)
-moveToPosition(groundBot,coords)
-# print('look for drone now')
-# # Create two threads to run the functions simultaneously
-# t1 = threading.Thread(target=run_supervision_and_fly)
-# t1.start()
-# t1.join()
+#     # Check if the nextQRcode value is 'done'
+#     if groundBot.nextQRcode == 'DONE':
+#         # Perform the action for the 'done' QR code
+#         moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
+
+#         # Break the loop
+#         break
+
+#     # Move to the position specified by the nextQRcode
+#     print('groundbot moving to next box')
+#     moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])

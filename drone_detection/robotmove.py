@@ -64,17 +64,20 @@ import digitalio
 
 def moveToPosition(groundBot, coord):
     x, y = coord
+
     time_per_cm_x = 0.033
     time_per_cm_y = 0.033
-    turn_time = 1.3
 
     if x > 0:
-        groundBot.turnRight()
+        while groundBot.yaw > -0.019:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
     elif x < 0:
-        groundBot.turnLeft()
-
-    time.sleep(turn_time)
-    groundBot.stop()
+        while groundBot.yaw < 0.019:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
 
     if x > 0:
         groundBot.forward()
@@ -85,16 +88,25 @@ def moveToPosition(groundBot, coord):
     groundBot.stop()
 
     if x > 0 and y > 0:
-        groundBot.turnLeft()
+        while groundBot.yaw < 0.000:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
     elif x > 0 and y < 0:
-        groundBot.turnRight()
+        while groundBot.yaw > 0.000:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
     elif x < 0 and y > 0:
-        groundBot.turnRight()
+        while groundBot.yaw < 0.000:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
     elif x < 0 and y < 0:
-        groundBot.turnLeft()
-
-    time.sleep(turn_time)
-    groundBot.stop()
+        while groundBot.yaw > 0.000:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
 
     if y > 0:
         groundBot.forward()
@@ -103,6 +115,7 @@ def moveToPosition(groundBot, coord):
 
     time.sleep(abs(y) * time_per_cm_y)
     groundBot.stop()
+
 
 # if __name__ == "__main__":
 #     try:

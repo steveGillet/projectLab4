@@ -16,7 +16,7 @@ def readBox(groundBot):
 
     # Define a function that will be executed by the timer thread
     def timer_function(duration):
-        print(duration)
+        # print(duration)
         global flag
         time.sleep(abs(movement_pid(duration)))
         groundBot.stop()
@@ -125,7 +125,7 @@ def readBox(groundBot):
                 aspect_ratio = float(w)/h
                 # print(w)
                 if w>= 12*25:
-                    print(w*h)
+                    # print(w*h)
                     if w * h > 280000:
                         look_for_qr_code = True
                     red_pixels = cv2.countNonZero(mask[y:y+h, x:x+w])
@@ -140,7 +140,7 @@ def readBox(groundBot):
                         groundBot.adjust_pan_tilt_servos(dx, dy)
                         if groundBot.cam1.panAngle < 85 and not flag:
                             groundBot.turnRight()
-                            print('right')
+                            # print('right')
                             # # Create a timer thread that will execute the timer_function after 5 seconds
                             timer = threading.Thread(target=timer_function, args=(.00135*dx,))
                             # # Start the timer thread
@@ -149,7 +149,7 @@ def readBox(groundBot):
                             
                         elif groundBot.cam1.panAngle > 95 and not flag:
                             groundBot.turnLeft()
-                            print('left')
+                            # print('left')
                             # # Create a timer thread that will execute the timer_function after 5 seconds
                             timer = threading.Thread(target=timer_function, args=(.00135*dx,))
 
@@ -158,7 +158,7 @@ def readBox(groundBot):
                             flag = True
                         else:
                             groundBot.forward()
-                            print('forward')
+                            # print('forward')
                             # # Create a timer thread that will execute the timer_function after 5 seconds
                             timer = threading.Thread(target=timer_function, args=(1,))
 
