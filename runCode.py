@@ -85,6 +85,8 @@ class GroundBot:
 
         self.yaw_drift_correction = 0.00011
 
+        self.xp = 0
+        self.yp = 0
         self.box_positions = {'A': (0, 0), 'B': (0, 0), 'C':(0,0), 'D': (0,0), 'E': (0,0), 'F':(0,0), 'DONE':(0,0)}
 
     def stop(self):
@@ -201,18 +203,18 @@ class Cam:
 
 groundBot = GroundBot()
 
-connect_to_tello_wifi('TELLO-995AD9')
+# connect_to_tello_wifi('TELLO-FE2776')
 
-print('drone searching')
-droneGrid(groundBot)
+# print('drone searching')
+# droneGrid(groundBot)
 
-# while True:
-#     # Read the first box and get the nextQRcode value
-#     print('groundbot searching')
-#     readBox(groundBot)
-#     print('groundbot backing out')
-#     groundBot.backward()
-#     time.sleep(3)
+while True:
+    # Read the first box and get the nextQRcode value
+    print('groundbot searching')
+    readBox(groundBot)
+    print('groundbot backing out')
+    groundBot.backward()
+    time.sleep(3)
     
 #     if groundBot.yaw < 0.000:
 #         while groundBot.yaw < 0.000:
