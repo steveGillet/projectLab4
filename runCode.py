@@ -255,5 +255,18 @@ while True:
 
     # Move to the position specified by the nextQRcode
     print('groundbot moving to next box')
-    moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode] - groundBot.currentPosition)
+    nextPosition = groundBot.box_positions[groundBot.nextQRcode] - groundBot.currentPosition
+    if (nextPosition[1]) < -100:
+        positionToMove = (nextPosition[0], nextPosition[1] + 100)
+    elif (nextPosition[1]) > 100:
+        positionToMove = (nextPosition[0], nextPosition[1] - 100)
+    else:
+        if (nextPosition[0]) < -100:
+            positionToMove = (nextPosition[0] + 100, nextPosition[1])
+        elif (nextPosition[0]) > 100:
+            positionToMove = (nextPosition[0] - 100, nextPosition[1])
+        else:
+            positionToMove = nextPosition
+     
+    moveToPosition(groundBot, nextPosition)
     groundBot.currentPosition = groundBot.box_positions[groundBot.nextQRcode]
