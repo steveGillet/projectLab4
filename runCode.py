@@ -42,48 +42,50 @@ class GroundBot:
     def __init__(self):
         self.panPin = 9
         self.tiltPin = 8
-        # self.in1 = digitalio.DigitalInOut(board.D24)
-        # self.in2 = digitalio.DigitalInOut(board.D15)
-        # self.in3 = digitalio.DigitalInOut(board.D22)
-        # self.in4 = digitalio.DigitalInOut(board.D23)
+        self.in1 = digitalio.DigitalInOut(board.D24)
+        self.in2 = digitalio.DigitalInOut(board.D15)
+        self.in3 = digitalio.DigitalInOut(board.D22)
+        self.in4 = digitalio.DigitalInOut(board.D23)
 
-        # self.in1.direction = digitalio.Direction.OUTPUT
-        # self.in2.direction = digitalio.Direction.OUTPUT
-        # self.in3.direction = digitalio.Direction.OUTPUT
-        # self.in4.direction = digitalio.Direction.OUTPUT
-        # self.i2c = busio.I2C(board.SCL, board.SDA)
+        self.in1.direction = digitalio.Direction.OUTPUT
+        self.in2.direction = digitalio.Direction.OUTPUT
+        self.in3.direction = digitalio.Direction.OUTPUT
+        self.in4.direction = digitalio.Direction.OUTPUT
+        self.i2c = busio.I2C(board.SCL, board.SDA)
 
-        # self.pca = PCA9685(self.i2c)
+        self.pca = PCA9685(self.i2c)
 
         # Set the PWM frequency to 60hz.
-        # self.pca.frequency = 60
-        # self.kit = ServoKit(channels=16)
-        # self.kit.servo[self.panPin].set_pulse_width_range(500,2500)
-        # self.kit.servo[self.tiltPin].set_pulse_width_range(500,2500)
+        self.pca.frequency = 60
+        self.kit = ServoKit(channels=16)
+        self.kit.servo[self.panPin].set_pulse_width_range(500,2500)
+        self.kit.servo[self.tiltPin].set_pulse_width_range(500,2500)
 
-        # self.cam1 = Cam(self.kit, self.panPin, self.tiltPin)
+        self.cam1 = Cam(self.kit, self.panPin, self.tiltPin)
 
         # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
         # but the PCA9685 will only actually give 12 bits of resolution.
-        # self.ena = 2
-        # self.enb = 3
+        self.ena = 2
+        self.enb = 3
 
-        # # Create PID controllers for pan and tilt servos
-        # self.pan_pid = PID(0.01, 0, 0, setpoint=0)
-        # self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
+        # Create PID controllers for pan and tilt servos
+        self.pan_pid = PID(0.01, 0, 0, setpoint=0)
+        self.tilt_pid = PID(0.01, 0, 0, setpoint=0)
 
-        # self.nextQRcode = None
+        self.turnFlag = False
+
+        self.nextQRcode = None
         
-        # self.mpu = adafruit_mpu6050.MPU6050(self.i2c)
+        self.mpu = adafruit_mpu6050.MPU6050(self.i2c)
 
-        # self.yaw = 0.000
-        # self.running = True
+        self.yaw = 0.000
+        self.running = True
 
-        # self.yawThread = threading.Thread(target=self.updateYaw)
-        # self.yawThread.start()
-        # self.dt = 0.01
+        self.yawThread = threading.Thread(target=self.updateYaw)
+        self.yawThread.start()
+        self.dt = 0.01
 
-        # self.yaw_drift_correction = 0.00011
+        self.yaw_drift_correction = 0.00011
 
         self.xp = 0
         self.yp = 0
@@ -128,6 +130,15 @@ class GroundBot:
         self.in4.value = True
         self.pca.channels[self.ena].duty_cycle = 0x7FFF
         self.pca.channels[self.enb].duty_cycle = 0x7FFF
+
+    def slowForward(self):
+        self.in1.value = False
+        self.in2.value = True
+        self.in3.value = False
+        self.in4.value = True
+        self.pca.channels[self.ena].duty_cycle = 0x3FFF
+        self.pca.channels[self.enb].duty_cycle = 0x3FFF
+
 
     def angleRight(self):
         self.in1.value = False
@@ -186,7 +197,7 @@ class Cam:
     def __init__(self, kit, panPin, tiltPin):
         self.kit = kit
         self.panAngle = 90
-        self.tiltAngle = 90
+        self.tiltAngle = 80
         self.panPin = panPin
         self.tiltPin = tiltPin
         self.kit.servo[self.panPin].angle=self.panAngle
@@ -212,9 +223,10 @@ while True:
     # Read the first box and get the nextQRcode value
     print('groundbot searching')
     readBox(groundBot)
-    print('groundbot backing out')
-    groundBot.backward()
-    time.sleep(3)
+    break
+    # print('groundbot backing out')
+    # groundBot.backward()
+    # time.sleep(3)
     
 #     if groundBot.yaw < 0.000:
 #         while groundBot.yaw < 0.000:
