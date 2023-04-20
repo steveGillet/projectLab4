@@ -20,14 +20,14 @@ while True:
     blur = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     # Define the lower and upper bounds of the colors
-    lowerRed = np.array([0, 194, 0])
-    upperRed = np.array([179, 255, 255])
+    lowerRed = np.array([0, 126, 19])
+    upperRed = np.array([179, 255, 243])
 
-    lowerOrange = np.array([0, 119, 89])
-    upperOrange = np.array([24, 217, 160])
+    lowerOrange = np.array([0, 76, 55])
+    upperOrange = np.array([14, 193, 255])
 
-    lowerCardboard = np.array([12, 45, 114])
-    upperCardboard = np.array([28, 82, 175])
+    lowerCardboard = np.array([8, 30, 51])
+    upperCardboard = np.array([29, 184, 139])
 
     # Create the masks
     redMask = cv2.inRange(blur, lowerRed, upperRed)

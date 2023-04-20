@@ -16,13 +16,13 @@ kit.servo[8].set_pulse_width_range(500,2500)
 # kit.continuous_servo[1].throttle = 0
 
 kit.servo[9].angle=90
-kit.servo[8].angle=90
-time.sleep(1)
-kit.servo[9].angle=45
-kit.servo[8].angle=45
-time.sleep(1)
-kit.servo[9].angle=135
-kit.servo[8].angle=135
-time.sleep(1)
-kit.servo[9].angle=90
-kit.servo[8].angle=90
+kit.servo[8].angle=80
+# time.sleep(1)
+# kit.servo[9].angle=45
+# kit.servo[8].angle=45
+# time.sleep(1)
+# kit.servo[9].angle=135
+# kit.servo[8].angle=135
+# time.sleep(1)
+# kit.servo[9].angle=90
+# kit.servo[8].angle=90
