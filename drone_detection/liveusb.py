@@ -2,9 +2,9 @@ import cv2
 from ultralytics import YOLO
 #from ultralytics.yolo.v8.detect.predict import DetectionPredictor
 
-model = YOLO("D:\downloads\\best.pt")
+model = YOLO("D:\Projects\\sgmnt.pt")
 
-results = model.track(source="D:\downloads\IMG_0637.mov",show=True, tracker="bytetrack.yaml")
+results = model(source="D:\projectLab4\output.avi", show=True)
 
 # for results in model.track(source="D:\downloads\IMG_0637.mov",show=False, stream=True, tracker="bytetrack.yaml"):
 #     frame = results.orig_img
