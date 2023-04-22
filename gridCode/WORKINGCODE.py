@@ -56,19 +56,19 @@ def droneGrid(groundBot):
                 
                 
 
-            # if yp == 38 :
-            #     tello.move_right(122)
-            #     waitfordrone()
-            #     xp +=122
+            if yp == 38 :
+                tello.move_right(122)
+                waitfordrone()
+                xp +=122
                 
-            #     print("Current Position: {}, {}".format(xp, yp))
-            #     tello.move_forward(60)
-            #     waitfordrone()
-            #     yp +=60
+                print("Current Position: {}, {}".format(xp, yp))
+                tello.move_forward(60)
+                waitfordrone()
+                yp +=60
                 
-            #     print("Current Position: {}, {}".format(xp, yp))
+                print("Current Position: {}, {}".format(xp, yp))
 
-            # Move backward in increments of 60 cm on the yp axis
+            #Move backward in increments of 60 cm on the yp axis
             while yp > 38 and (xp == 122):
                 tello.move_back(60)
                 waitfordrone()
@@ -144,9 +144,9 @@ def droneGrid(groundBot):
     tello.streamon()
     time.sleep(1)
 
-    t1 = threading.Thread(target=tellopath, args=(tello, xp, yp))
-    t2 = threading.Thread(target=QR_tello, args=(tello, xp, yp))
+    #t1 = threading.Thread(target=tellopath, args=(tello, xp, yp))
+    t2 = threading.Thread(target=QR_tello, args=(tello, xp, yp,))
 
-    t1.start()
+    #t1.start()
     t2.start()
-
+#droneGrid()
