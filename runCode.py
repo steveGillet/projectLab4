@@ -236,14 +236,15 @@ connect_to_tello_wifi('TELLO-995AD9')
 print('drone searching')
 droneGrid(groundBot)
 
-# while True:
+while True:
     # Read the first box and get the nextQRcode value
     print('groundbot searching')
     readBox(groundBot)
-    break
-    # print('groundbot backing out')
-    # groundBot.backward()
-    # time.sleep(3)
+    # break
+    print('groundbot backing out')
+    time.sleep(1)
+    groundBot.backward()
+    time.sleep(3)
     
     if groundBot.yaw < 0.000:
         while groundBot.yaw < 0.000:
@@ -271,7 +272,7 @@ droneGrid(groundBot)
 
     # Move to the position specified by the nextQRcode
     print('groundbot moving to next box')
-    nextPosition = groundBot.box_positions[groundBot.nextQRcode] - groundBot.currentPosition
+    nextPosition = (groundBot.box_positions[groundBot.nextQRcode][0] - groundBot.currentPosition[0], groundBot.box_positions[groundBot.nextQRcode][1] - groundBot.currentPosition[1])
     if (nextPosition[1]) < -100:
         positionToMove = (nextPosition[0], nextPosition[1] + 100)
     elif (nextPosition[1]) > 100:
