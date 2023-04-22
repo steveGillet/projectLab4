@@ -13,7 +13,7 @@ def droneGrid(groundBot):
 
     def tellopath(tello):
         tello.send_command("takeoff")
-        waitfordrone()
+        time.sleep(7)
         tello.send_command("speed 10")
         # height = tello.get_height()
         # Rheight = 40
@@ -113,15 +113,15 @@ def droneGrid(groundBot):
                     barcodeType = obj.type
                     string = "Data " + str(barcodeData) + " | Type " + str(barcodeType)
                 
-                    cv2.putText(frame, string, (x,y), cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,0,0), 2)
+                    # cv2.putText(frame, string, (x,y), cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,0,0), 2)
                     print("Barcode: "+barcodeData +" | Type: "+barcodeType)
-                cv2.imshow('Image', frame)
-            code = cv2.waitKey(10)
-            if code == ord('q'):
-                break
+                # cv2.imshow('Image', frame)
+        #     code = cv2.waitKey(10)
+        #     if code == ord('q'):
+        #         break
 
-        tello.send_command("streamoff")
-        cv2.destroyAllWindows()
+        # tello.send_command("streamoff")
+        # cv2.destroyAllWindows()
 
     #Get QR value
     bar = queue.LifoQueue()

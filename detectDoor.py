@@ -47,7 +47,7 @@ def readBox(groundBot):
     upperOrange = np.array([179, 202, 200])
 
     lowerCardboard = np.array([11, 34, 88])
-    upperCardboard = np.array([32, 81, 215])
+    upperCardboard = np.array([32, 81, 215])    
 
     redFlag = 0
     minWidthCardboard = 50
@@ -241,12 +241,12 @@ def readBox(groundBot):
             
 
         # Show the image
-        cv2.imshow("Red, square door frame detection", frame)
+        # cv2.imshow("Red, square door frame detection", frame)
 
         # Exit the loop if 'q' is pressed
-        if cv2.waitKey(1) == ord('q'):
-            groundBot.stop()
-            break
+        # if cv2.waitKey(1) == ord('q'):
+        #     groundBot.stop()
+        #     break
 
 
     cap.release()
