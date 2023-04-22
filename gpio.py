@@ -24,8 +24,8 @@ pca.frequency = 60
 
 # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
 # but the PCA9685 will only actually give 12 bits of resolution.
-ena = 2
-enb = 3
+ena = 14
+enb = 15
 
 def stop():
     in1.value = False
@@ -78,10 +78,10 @@ def forward():
 # input()
 # start_time = time.time()
 turnLeft()
-# input()
-# end_time = time.time()
-# time_taken = end_time - start_time
-# print(f'Time taken to rotate 90 degrees: {time_taken} seconds')
+# # input()
+# # end_time = time.time()
+# # time_taken = end_time - start_time
+# # print(f'Time taken to rotate 90 degrees: {time_taken} seconds')
 time.sleep(1)
 turnRight()
 time.sleep(1)

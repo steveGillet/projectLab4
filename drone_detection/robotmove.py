@@ -4,6 +4,12 @@ import board
 import busio
 import digitalio
 
+import cv2
+import numpy as np
+
+
+
+
 # in1 = digitalio.DigitalInOut(board.D24)
 # in2 = digitalio.DigitalInOut(board.D15)
 # in3 = digitalio.DigitalInOut(board.D22)
@@ -63,10 +69,103 @@ import digitalio
 #     pca.channels[enb].duty_cycle = 0x7FFF
 
 def moveToPosition(groundBot, coord):
+
+    # Initialize camera
+    cap = cv2.VideoCapture(0)
+
+    def process_frame(frame):
+        # Convert to grayscale and apply Gaussian blur
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+
+        # Detect edges using Canny edge detection
+        edges = cv2.Canny(blurred, 50, 200)
+
+        # Find contours
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        return contours
+
+    def check_obstacle(area_threshold=7500, distance_threshold=1500):
+        # Capture a frame from the camera
+        ret, frame = cap.read()
+
+        if not ret:
+            print("Failed to capture frame")
+            return False
+
+        # Process the frame and find contours
+        contours = process_frame(frame)
+
+        # Check if any of the contours are large enough and close enough to be considered obstacles
+        for contour in contours:
+            area = cv2.contourArea(contour)
+
+            if area > area_threshold:
+                # Calculate the center of the contour
+                moments = cv2.moments(contour)
+                cX = int(moments["m10"] / moments["m00"])
+                cY = int(moments["m01"] / moments["m00"])
+
+                # Check if the contour is close enough to be an obstacle
+                if cY < distance_threshold:
+                    print('obstacle detected')
+                    return True
+
+        return False
+    
+    def avoidObstacle():
+        timePerCM = 0.033
+        # turn right
+        currentYaw = groundBot.yaw
+        while groundBot.yaw - currentYaw < 0.019:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
+
+        # move forward
+        groundBot.forward()
+        time.sleep(61 * timePerCM)
+
+        # turn left
+        currentYaw = groundBot.yaw
+        while groundBot.yaw - currentYaw < 0.019:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
+
+        # move forward
+        groundBot.forward()
+        time.sleep(122 * timePerCM)
+
+        # turn left
+        currentYaw = groundBot.yaw
+        while groundBot.yaw - currentYaw < 0.019:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
+
+        # move forward
+        groundBot.forward()
+        time.sleep(61 * timePerCM)
+
+        # turn right
+        currentYaw = groundBot.yaw
+        while groundBot.yaw - currentYaw < 0.019:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
+
+    def move():
+        groundBot.forward()
+
+        while check_obstacle():
+            groundBot.stop()
+            avoidObstacle()
+
     x, y = coord
 
-    time_per_cm_x = 0.033
-    time_per_cm_y = 0.033
+    timePerCM = 0.033
 
     if x > 0:
         while groundBot.yaw > -0.019:
@@ -79,12 +178,9 @@ def moveToPosition(groundBot, coord):
             time.sleep(0.1)
         groundBot.stop()
 
-    if x > 0:
-        groundBot.forward()
-    elif x < 0:
-        groundBot.backward()
+    move()
 
-    time.sleep(abs(x) * time_per_cm_x)
+    time.sleep(abs(x) * timePerCM)
     groundBot.stop()
 
     if x > 0 and y > 0:
@@ -108,12 +204,9 @@ def moveToPosition(groundBot, coord):
             time.sleep(0.1)
         groundBot.stop()
 
-    if y > 0:
-        groundBot.forward()
-    elif y < 0:
-        groundBot.backward()
-
-    time.sleep(abs(y) * time_per_cm_y)
+    move()
+   
+    time.sleep(abs(y) * timePerCM)
     groundBot.stop()
 
 

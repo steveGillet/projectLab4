@@ -7,78 +7,81 @@ import threading
 import queue
 
 def droneGrid(groundBot):
-    def tellopath(tello, xp, yp):
+    def tellopath(tello):
         def waitfordrone():
             time.sleep(2)
         while tello.get_speed_x()>0 and tello.get_speed_y()>0 and tello.get_speed_z()>0:
-            time.sleep(.01)
+            time.sleep(1)
 
         # Make Drone takeoff
         tello.takeoff()
         waitfordrone()
         time.sleep(1)
+        tello.set_speed(10)
+        time.sleep(1)
         height= tello.get_height()
-        time.sleep(.5)
+        time.sleep(1)
         Rheight=120-height
+        time.sleep(1)
         tello.move_up(Rheight)
         time.sleep(1)
         # Move forward (For efficiency)
         tello.move_forward(38)
         waitfordrone()
-        yp += 38
+        groundBot.yp += 38
         
-        print("Current Position: {}, {}".format(xp, yp))
+        print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
 
         while True:
-            # Move forward in increments of 76 cm on the yp axis
-            while yp < 158 and (xp == 0):
-                tello.move_forward(60)
+            # Move forward in increments of 76 cm on the groundBot.yp axis
+            while groundBot.yp < 342 and (groundBot.xp == 0 or groundBot.xp == 184 or groundBot.xp == 368 or groundBot.xp == 552 or groundBot.xp == 736):
+                tello.move_forward(76)
                 waitfordrone()
-                yp += 60
+                groundBot.yp += 76
                 
-                print("Current Position: {}, {}".format(xp, yp))
-                if yp == 158:
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
+                if groundBot.yp == 342:
                     break
                 
                 
-            # Move drone in xp position
-            if yp == 158:
-                tello.move_right(122)
+            # Move drone in groundBot.xp position
+            if groundBot.yp == 342:
+                tello.move_right(92)
                 waitfordrone()
-                xp +=122
+                groundBot.xp +=92
                 
-                print("Current Position: {}, {}".format(xp, yp))
-                tello.move_back(60)
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
+                tello.move_back(76)
                 waitfordrone()
-                yp -=60
+                groundBot.yp -=76
                 
-                print("Current Position: {}, {}".format(xp, yp))
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
                 
                 
 
-            if yp == 38 :
-                tello.move_right(122)
+            if groundBot.yp == 38 :
+                tello.move_right(92)
                 waitfordrone()
-                xp +=122
+                groundBot.xp +=92
                 
-                print("Current Position: {}, {}".format(xp, yp))
-                tello.move_forward(60)
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
+                tello.move_forward(76)
                 waitfordrone()
-                yp +=60
+                groundBot.yp +=76
                 
-                print("Current Position: {}, {}".format(xp, yp))
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
 
-            #Move backward in increments of 60 cm on the yp axis
-            while yp > 38 and (xp == 122):
-                tello.move_back(60)
+            #Move backward in increments of 76 cm on the groundBot.yp axis
+            while groundBot.yp > 38 and (groundBot.xp == 92 or groundBot.xp == 276 or groundBot.xp == 460 or groundBot.xp == 644 or groundBot.xp == 828):
+                tello.move_back(76)
                 waitfordrone()
-                yp-=60
+                groundBot.yp-=76
                 
-                print("Current Position: {}, {}".format(xp, yp))
-                if yp == 38:
+                print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
+                if groundBot.yp == 38:
                     break
             
-    def QR_tello(tello, xp, yp):
+    def QR_tello(tello):
         while True:
             # Get the Tello drone's camera feed
             frame = tello.get_frame_read().frame
@@ -97,25 +100,25 @@ def droneGrid(groundBot):
 
                     barcodeData = obj.data.decode("utf-8")
                     if barcodeData == 'A':
-                        groundBot.box_positions['A'] = (xp, yp)
+                        groundBot.box_positions['A'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['A'])
                     elif barcodeData == 'B':
-                        groundBot.box_positions['B'] = (xp, yp)
+                        groundBot.box_positions['B'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['B'])
                     elif barcodeData == 'C':
-                        groundBot.box_positions['C'] = (xp, yp)
+                        groundBot.box_positions['C'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['C'])
                     elif barcodeData == 'D':
-                        groundBot.box_positions['D'] = (xp, yp)
+                        groundBot.box_positions['D'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['D'])
                     elif barcodeData == 'E':
-                        groundBot.box_positions['E'] = (xp, yp)
+                        groundBot.box_positions['E'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['E'])
                     elif barcodeData == 'F':
-                        groundBot.box_positions['F'] = (xp, yp)
+                        groundBot.box_positions['F'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['F'])
                     elif barcodeData == 'DONE':
-                        groundBot.box_positions['DONE'] = (xp, yp)
+                        groundBot.box_positions['DONE'] = (groundBot.xp, groundBot.yp)
                         print(groundBot.box_positions['DONE'])
                     barcodeType = obj.type
                     string = "Data " + str(barcodeData) + " | Type " + str(barcodeType)
@@ -133,10 +136,6 @@ def droneGrid(groundBot):
     #Get QR value
     bar = queue.LifoQueue()
 
-    # Define starting position
-    xp = 0
-    yp = 0
-
     # Create Tello object/ Connect
     tello = Tello()
     tello.connect()
@@ -144,8 +143,8 @@ def droneGrid(groundBot):
     tello.streamon()
     time.sleep(1)
 
-    #t1 = threading.Thread(target=tellopath, args=(tello, xp, yp))
-    t2 = threading.Thread(target=QR_tello, args=(tello, xp, yp,))
+    t1 = threading.Thread(target=tellopath, args=(tello,))
+    t2 = threading.Thread(target=QR_tello, args=(tello,))
 
     #t1.start()
     t2.start()
