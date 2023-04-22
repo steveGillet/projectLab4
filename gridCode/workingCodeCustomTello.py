@@ -17,57 +17,57 @@ def droneGrid(groundBot):
         tello.send_command("speed 10")
         # height = tello.get_height()
         # Rheight = 40
-        tello.send_command(f"up 80")
-        tello.send_command("forward 38")
+        tello.send_command(f"up 70")
         waitfordrone()
-        groundBot.yp += 38
+        tello.send_command("forward 20")
+        yp += 20
         
         print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
 
         while True:
             # Move forward in increments of 76 cm on the groundBot.yp axis
-            while groundBot.yp < 342 and (groundBot.xp == 0 or groundBot.xp == 152 or groundBot.xp == 304 or groundBot.xp == 456 or groundBot.xp == 608 or groundBot.xp == 760):
-                tello.send_command("forward 76")
+            while groundBot.yp < 292 and (groundBot.xp == 0 or groundBot.xp == 152 or groundBot.xp == 304 or groundBot.xp == 456 or groundBot.xp == 608):
+                tello.send_command("forward 68")
                 waitfordrone()
-                groundBot.yp += 76
+                groundBot.yp += 68
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
-                if groundBot.yp == 342:
+                if groundBot.yp == 292:
                     break
 
             # Move drone in groundBot.xp position
-            if groundBot.yp == 342:
+            if groundBot.yp == 292:
                 tello.send_command("right 76")
                 waitfordrone()
                 groundBot.xp += 76
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
-                tello.send_command("back 76")
+                tello.send_command("back 68")
                 waitfordrone()
-                groundBot.yp -= 76
+                groundBot.yp -= 68
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
 
-            if groundBot.yp == 38:
+            if groundBot.yp == 20:
                 tello.send_command("right 76")
                 waitfordrone()
                 groundBot.xp += 76
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
-                tello.send_command("forward 76")
+                tello.send_command("forward 68")
                 waitfordrone()
-                groundBot.yp += 76
+                groundBot.yp += 68
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
 
-            # Move backward in increments of 76 cm on the groundBot.yp axis
-            while groundBot.yp > 38 and (groundBot.xp == 76 or groundBot.xp == 228 or groundBot.xp == 380 or groundBot.xp == 532 or groundBot.xp == 684 or groundBot.xp == 836):
-                tello.send_command("back 76")
+            # Move backward in increments of 68 cm on the groundBot.yp axis
+            while groundBot.yp > 20 and (groundBot.xp == 76 or groundBot.xp == 228 or groundBot.xp == 380 or groundBot.xp == 532):
+                tello.send_command("back 68")
                 waitfordrone()
-                groundBot.yp -= 76
+                groundBot.yp -= 68
 
                 print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
-                if groundBot.yp == 38:
+                if groundBot.yp == 20:
                     break
 
             
