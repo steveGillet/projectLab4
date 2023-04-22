@@ -90,6 +90,7 @@ class GroundBot:
         self.xp = 0
         self.yp = 0
         self.box_positions = {'A': (0, 0), 'B': (0, 0), 'C':(0,0), 'D': (0,0), 'E': (0,0), 'F':(0,0), 'DONE':(0,0)}
+        self.currentPosition = (0,0)
 
     def stop(self):
         self.in1.value = False
@@ -237,37 +238,51 @@ droneGrid(groundBot)
 
 # while True:
     # Read the first box and get the nextQRcode value
-    # print('groundbot searching')
-    # readBox(groundBot)
-    # break
+    print('groundbot searching')
+    readBox(groundBot)
+    break
     # print('groundbot backing out')
     # groundBot.backward()
     # time.sleep(3)
     
-#     if groundBot.yaw < 0.000:
-#         while groundBot.yaw < 0.000:
-#             groundBot.turnLeft()
-#             time.sleep(0.1)
-#         groundBot.stop()
+    if groundBot.yaw < 0.000:
+        while groundBot.yaw < 0.000:
+            groundBot.turnLeft()
+            time.sleep(0.1)
+        groundBot.stop()
 
-#     elif groundBot.yaw > 0.000:
-#         while groundBot.yaw > 0.000:
-#             groundBot.turnRight()
-#             time.sleep(0.1)
-#         groundBot.stop()
+    elif groundBot.yaw > 0.000:
+        while groundBot.yaw > 0.000:
+            groundBot.turnRight()
+            time.sleep(0.1)
+        groundBot.stop()
 
-#     print('groundbot waiting')
-#     # Wait for the corresponding box_positions variable to be updated
-#     groundBot.waitForBoxPosition(groundBot.nextQRcode)
+    print('groundbot waiting')
+    # Wait for the corresponding box_positions variable to be updated
+    groundBot.waitForBoxPosition(groundBot.nextQRcode)
 
-#     # Check if the nextQRcode value is 'done'
-#     if groundBot.nextQRcode == 'DONE':
-#         # Perform the action for the 'done' QR code
-#         moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
+    # Check if the nextQRcode value is 'done'
+    if groundBot.nextQRcode == 'DONE':
+        # Perform the action for the 'done' QR code
+        moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
 
-#         # Break the loop
-#         break
+        # Break the loop
+        break
 
-#     # Move to the position specified by the nextQRcode
-#     print('groundbot moving to next box')
-#     moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
+    # Move to the position specified by the nextQRcode
+    print('groundbot moving to next box')
+    nextPosition = groundBot.box_positions[groundBot.nextQRcode] - groundBot.currentPosition
+    if (nextPosition[1]) < -100:
+        positionToMove = (nextPosition[0], nextPosition[1] + 100)
+    elif (nextPosition[1]) > 100:
+        positionToMove = (nextPosition[0], nextPosition[1] - 100)
+    else:
+        if (nextPosition[0]) < -100:
+            positionToMove = (nextPosition[0] + 100, nextPosition[1])
+        elif (nextPosition[0]) > 100:
+            positionToMove = (nextPosition[0] - 100, nextPosition[1])
+        else:
+            positionToMove = nextPosition
+     
+    moveToPosition(groundBot, nextPosition)
+    groundBot.currentPosition = groundBot.box_positions[groundBot.nextQRcode]
