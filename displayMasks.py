@@ -11,6 +11,8 @@ cap = cv2.VideoCapture(0)
 while True:
     _, frame = cap.read()
 
+    frame = cv2.flip(frame, 0)
+
     # Convert the frame to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -20,14 +22,18 @@ while True:
     blur = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     # Define the lower and upper bounds of the colors
-    lowerRed = np.array([0, 126, 19])
-    upperRed = np.array([179, 255, 243])
 
-    lowerOrange = np.array([0, 76, 55])
-    upperOrange = np.array([14, 193, 255])
+    lowerRed = np.array([0, 155, 75])
+    upperRed = np.array([179, 255, 255])
 
-    lowerCardboard = np.array([8, 30, 51])
-    upperCardboard = np.array([29, 184, 139])
+    lowerOrange = np.array([163, 98, 70])
+    upperOrange = np.array([179, 155, 155])
+
+    lowerCardboard = np.array([11, 34, 88])
+    upperCardboard = np.array([32, 81, 215])
+
+
+
 
     # Create the masks
     redMask = cv2.inRange(blur, lowerRed, upperRed)

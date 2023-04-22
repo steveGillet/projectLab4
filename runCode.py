@@ -18,7 +18,7 @@ from drone_detection.supervision2 import supervision2
 import subprocess
 from drone_detection.robotmove import moveToPosition 
 import adafruit_mpu6050
-from gridCode.WORKINGCODE import droneGrid
+from gridCode.workingCodeCustomTello import droneGrid
 
 def connect_to_tello_wifi(ssid, password=None):
     try:
@@ -65,8 +65,8 @@ class GroundBot:
 
         # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
         # but the PCA9685 will only actually give 12 bits of resolution.
-        self.ena = 2
-        self.enb = 3
+        self.ena = 14
+        self.enb = 15
 
         # Create PID controllers for pan and tilt servos
         self.pan_pid = PID(0.01, 0, 0, setpoint=0)
@@ -115,6 +115,22 @@ class GroundBot:
         self.pca.channels[self.ena].duty_cycle = 0x7FFF
         self.pca.channels[self.enb].duty_cycle = 0x7FFF
 
+    def slowRight(self):
+        self.in1.value = True
+        self.in2.value = False
+        self.in3.value = False
+        self.in4.value = True
+        self.pca.channels[self.ena].duty_cycle = 0x47FF
+        self.pca.channels[self.enb].duty_cycle = 0x47FF
+
+    def slowLeft(self):
+        self.in1.value = False
+        self.in2.value = True
+        self.in3.value = True
+        self.in4.value = False
+        self.pca.channels[self.ena].duty_cycle = 0x47FF
+        self.pca.channels[self.enb].duty_cycle = 0x47FF        
+
     def backward(self):
         self.in1.value = True
         self.in2.value = False
@@ -145,7 +161,7 @@ class GroundBot:
         self.in2.value = True
         self.in3.value = False
         self.in4.value = True
-        self.pca.channels[self.ena].duty_cycle = 0x5FFF
+        self.pca.channels[self.ena].duty_cycle = 0x1FFF
         self.pca.channels[self.enb].duty_cycle = 0x7FFF
 
     def angleLeft(self):
@@ -154,7 +170,7 @@ class GroundBot:
         self.in3.value = False
         self.in4.value = True
         self.pca.channels[self.ena].duty_cycle = 0x7FFF
-        self.pca.channels[self.enb].duty_cycle = 0x5FFF
+        self.pca.channels[self.enb].duty_cycle = 0x1FFF
 
 
     # Update the adjust_pan_tilt_servos function to use the PID controller
@@ -214,16 +230,16 @@ class Cam:
 
 groundBot = GroundBot()
 
-# connect_to_tello_wifi('TELLO-FE2776')
+connect_to_tello_wifi('TELLO-995AD9')
 
-# print('drone searching')
-# droneGrid(groundBot)
+print('drone searching')
+droneGrid(groundBot)
 
-while True:
+# while True:
     # Read the first box and get the nextQRcode value
-    print('groundbot searching')
-    readBox(groundBot)
-    break
+    # print('groundbot searching')
+    # readBox(groundBot)
+    # break
     # print('groundbot backing out')
     # groundBot.backward()
     # time.sleep(3)
