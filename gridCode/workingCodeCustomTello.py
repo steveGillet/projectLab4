@@ -20,6 +20,7 @@ def droneGrid(groundBot):
         tello.send_command(f"up 70")
         waitfordrone()
         tello.send_command("forward 20")
+        waitfordrone()
         yp += 20
         
         print("Current Position: {}, {}".format(groundBot.xp, groundBot.yp))
