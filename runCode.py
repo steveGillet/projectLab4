@@ -8,7 +8,7 @@ import busio
 from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 from simple_pid import PID
-from ultralytics import YOLO
+# from ultralytics import YOLO
 # from TelloPython.Single_Tello_Test.tello import Tello
 # from TelloPython.Single_Tello_Test.tello_test import flyDrone
 import sys
@@ -33,10 +33,10 @@ def connect_to_tello_wifi(ssid, password=None):
     except subprocess.CalledProcessError as e:
         print(f"Error connecting to {ssid}: {e.output}")
 
-def run_supervision_and_fly():
-    supervision2()
-    tello.send_command('takeoff')
-    flyDrone(tello)
+# def run_supervision_and_fly():
+#     supervision2()
+#     tello.send_command('takeoff')
+#     flyDrone(tello)
 
 class GroundBot:
     def __init__(self):
@@ -262,14 +262,6 @@ while True:
     # Wait for the corresponding box_positions variable to be updated
     groundBot.waitForBoxPosition(groundBot.nextQRcode)
 
-    # Check if the nextQRcode value is 'done'
-    if groundBot.nextQRcode == 'DONE':
-        # Perform the action for the 'done' QR code
-        moveToPosition(groundBot, groundBot.box_positions[groundBot.nextQRcode])
-
-        # Break the loop
-        break
-
     # Move to the position specified by the nextQRcode
     print('groundbot moving to next box')
     nextPosition = (groundBot.box_positions[groundBot.nextQRcode][0] - groundBot.currentPosition[0], groundBot.box_positions[groundBot.nextQRcode][1] - groundBot.currentPosition[1])
@@ -284,6 +276,18 @@ while True:
             positionToMove = (nextPosition[0] - 100, nextPosition[1])
         else:
             positionToMove = nextPosition
+
+    # Check if the nextQRcode value is 'done'
+    if groundBot.nextQRcode == 'DONE':
+        # Perform the action for the 'done' QR code
+        moveToPosition(groundBot, nextPosition)
+
+        # Enter and read the last box
+        print('groundbot searching')
+        readBox(groundBot)
+
+        # Break the loop
+        break
      
     moveToPosition(groundBot, nextPosition)
     groundBot.currentPosition = groundBot.box_positions[groundBot.nextQRcode]
